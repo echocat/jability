@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ Version: MPL 2.0
+  ~
+  ~ echocat Jability, Copyright (c) 2013 echocat
+  ~
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <name>echocat Jability</name>
+    <groupId>org.echocat</groupId>
+    <artifactId>jability</artifactId>
+    <packaging>pom</packaging>
+    <version>0.1.0-SNAPSHOT</version>
+    <url>https://jability.echocat.org</url>
+
+    <modules>
+        <module>runtime</module>
+    </modules>
+
+    <licenses>
+        <license>
+            <name>Mozilla Public License 2.0</name>
+            <url>http://www.mozilla.org/MPL/2.0</url>
+        </license>
+    </licenses>
+
+    <organization>
+        <url>https://echocat.org/</url>
+        <name>echocat</name>
+    </organization>
+
+    <properties>
+        <maven.build.timestamp.format>yyyy-MM-dd HH:mm:ssZ</maven.build.timestamp.format>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.build.basePackages>${project.groupId}.${project.artifactId}</project.build.basePackages>
+
+        <versions.org.echocat.jomon>1.2.5</versions.org.echocat.jomon>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.echocat.jomon</groupId>
+                <artifactId>runtime</artifactId>
+                <version>${versions.org.echocat.jomon}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.echocat.jomon</groupId>
+                <artifactId>cache</artifactId>
+                <version>${versions.org.echocat.jomon}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.echocat.jomon.net</groupId>
+                <artifactId>common</artifactId>
+                <version>${versions.org.echocat.jomon}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.echocat.jomon.net</groupId>
+                <artifactId>cluster</artifactId>
+                <version>${versions.org.echocat.jomon}</version>
+            </dependency>
+
+            <!-- Common -->
+            <dependency>
+                <groupId>com.google.code.findbugs</groupId>
+                <artifactId>jsr305</artifactId>
+                <version>1.3.9</version>
+            </dependency>
+
+            <!-- Logging -->
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-log4j12</artifactId>
+                <version>1.7.2</version>
+            </dependency>
+
+            <!-- Testing -->
+            <dependency>
+                <groupId>org.echocat.jomon</groupId>
+                <artifactId>testing</artifactId>
+                <version>${versions.org.echocat.jomon}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.echocat.jomon.net</groupId>
+                <artifactId>testing</artifactId>
+                <version>${versions.org.echocat.jomon}</version>
+            </dependency>
+
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- Common -->
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <!--suppress MavenModelInspection -->
+                    <version>2.5</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.2</version>
+                    <configuration>
+                        <archive>
+                            <manifest>
+                                <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                                <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            </manifest>
+                        </archive>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.1.2</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>2.3.2</version>
+                    <configuration>
+                        <source>1.7</source>
+                        <target>1.7</target>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-deploy-plugin</artifactId>
+                    <version>2.7</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>org.apache.maven.wagon</groupId>
+                            <artifactId>wagon-webdav-jackrabbit</artifactId>
+                            <version>2.3</version>
+                        </dependency>
+                    </dependencies>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.4</version>
+                    <configuration>
+                        <tagNameFormat>version-@{project.version}</tagNameFormat>
+                        <arguments>-DskipTests</arguments>
+                        <scmCommentPrefix>* [RELEASE] </scmCommentPrefix>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.2.1</version>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>single</goal>
+                            </goals>
+                            <configuration>
+                                <descriptors>
+                                    <descriptor>src/main/assemble/distribution.xml</descriptor>
+                                </descriptors>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-source-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <!--suppress MavenModelInspection -->
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/echocat/jability/issues</url>
+    </issueManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>echocat-jability-releases</id>
+            <url>dav:https://repo.echocat.org/jability-releases</url>
+        </repository>
+        <snapshotRepository>
+            <id>echocat-jability-snapshots</id>
+            <url>dav:https://repo.echocat.org/jability-snapshots</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>echocat</id>
+            <url>http://repo.echocat.org/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <pluginRepositories>
+        <pluginRepository>
+            <id>echocat</id>
+            <url>http://repo.echocat.org/all</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </pluginRepository>
+    </pluginRepositories>
+
+    <scm>
+        <connection>scm:git:git@github.com:echocat/jability.git</connection>
+        <developerConnection>scm:git:git@github.com:echocat/jability.git</developerConnection>
+        <url>https://github.com/echocat/jability</url>
+    </scm>
+
+</project>

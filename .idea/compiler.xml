@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CompilerAPISettings">
+    <option name="ADDITIONAL_OPTIONS_STRING" value="-target 1.7" />
+    <option name="MAXIMUM_HEAP_SIZE" value="256" />
+  </component>
+  <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="Javac" />
+    <excludeFromCompile>
+      <directory url="file://$PROJECT_DIR$/advancedruntime/target/generated-sources/annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/advancedruntime/target/generated-test-sources/test-annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/compilerplugin/target/generated-sources/annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/compilerplugin/target/generated-test-sources/test-annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/sun/target/generated-sources/annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/sun/target/generated-test-sources/test-annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/common/target/generated-sources/annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/common/target/generated-test-sources/test-annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/runtime/target/generated-sources/annotations" includeSubdirectories="true" />
+      <directory url="file://$PROJECT_DIR$/runtime/target/generated-test-sources/test-annotations" includeSubdirectories="true" />
+    </excludeFromCompile>
+    <resourceExtensions />
+    <wildcardResourcePatterns>
+      <entry name="?*.properties" />
+      <entry name="?*.xml" />
+      <entry name="?*.gif" />
+      <entry name="?*.png" />
+      <entry name="?*.jpeg" />
+      <entry name="?*.jpg" />
+      <entry name="?*.html" />
+      <entry name="?*.dtd" />
+      <entry name="?*.tld" />
+      <entry name="?*.ftl" />
+      <entry name="?*.xsd" />
+    </wildcardResourcePatterns>
+    <annotationProcessing>
+      <profile default="true" name="Default" enabled="false">
+        <processorPath useClasspath="true" />
+      </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="boot (1) (net.motortalk.common.maven)" />
+        <module name="common" />
+        <module name="common (1) (org.echocat.swarm.stripes)" />
+        <module name="org.echocat.jability.runtime" />
+        <module name="org.echocat.jemoni.bundle" />
+        <module name="org.echocat.jemoni.carbon" />
+        <module name="org.echocat.jemoni.jmx" />
+        <module name="org.echocat.swarm.boot.maven" />
+        <module name="org.echocat.swarm.boot.war" />
+        <module name="org.echocat.swarm.gfx.common" />
+        <module name="org.echocat.swarm.gfx.svg" />
+        <module name="org.echocat.swarm.jetty.common" />
+        <module name="org.echocat.swarm.maven.common" />
+        <module name="org.echocat.swarm.servlet.taglib" />
+        <module name="org.echocat.swarm.servlet.utils" />
+        <module name="org.echocat.swarm.spring.common" />
+        <module name="org.echocat.swarm.spring.testing" />
+        <module name="org.echocat.swarm.stripes.common" />
+        <module name="svg" />
+        <module name="taglib" />
+        <module name="testing" />
+        <module name="utils" />
+        <module name="warboot" />
+      </profile>
+    </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="boot (1) (net.motortalk.common.maven)" target="1.7" />
+      <module name="boot (2) (org.echocat.swarm)" target="1.7" />
+      <module name="common" target="1.7" />
+      <module name="common (1) (org.echocat.swarm.stripes)" target="1.7" />
+      <module name="gfx" target="1.7" />
+      <module name="jetty" target="1.7" />
+      <module name="maven" target="1.7" />
+      <module name="org.echocat.jability" target="1.7" />
+      <module name="org.echocat.jability.runtime" target="1.7" />
+      <module name="org.echocat.jemoni" target="1.7" />
+      <module name="org.echocat.jemoni.bundle" target="1.7" />
+      <module name="org.echocat.jemoni.carbon" target="1.7" />
+      <module name="org.echocat.jemoni.jmx" target="1.7" />
+      <module name="org.echocat.swarm" target="1.7" />
+      <module name="org.echocat.swarm.boot" target="1.7" />
+      <module name="org.echocat.swarm.boot.maven" target="1.7" />
+      <module name="org.echocat.swarm.boot.war" target="1.7" />
+      <module name="org.echocat.swarm.gfx" target="1.7" />
+      <module name="org.echocat.swarm.gfx.common" target="1.7" />
+      <module name="org.echocat.swarm.gfx.svg" target="1.7" />
+      <module name="org.echocat.swarm.jetty" target="1.7" />
+      <module name="org.echocat.swarm.jetty.common" target="1.7" />
+      <module name="org.echocat.swarm.maven" target="1.7" />
+      <module name="org.echocat.swarm.maven.common" target="1.7" />
+      <module name="org.echocat.swarm.servlet" target="1.7" />
+      <module name="org.echocat.swarm.servlet.taglib" target="1.7" />
+      <module name="org.echocat.swarm.servlet.utils" target="1.7" />
+      <module name="org.echocat.swarm.spring" target="1.7" />
+      <module name="org.echocat.swarm.spring.common" target="1.7" />
+      <module name="org.echocat.swarm.spring.testing" target="1.7" />
+      <module name="org.echocat.swarm.stripes" target="1.7" />
+      <module name="org.echocat.swarm.stripes.common" target="1.7" />
+      <module name="servlet" target="1.7" />
+      <module name="spring" target="1.7" />
+      <module name="stripes" target="1.7" />
+      <module name="svg" target="1.7" />
+      <module name="swarm" target="1.7" />
+      <module name="testing" target="1.7" />
+      <module name="warboot" target="1.7" />
+    </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="MAXIMUM_HEAP_SIZE" value="256" />
+  </component>
+</project>
+
