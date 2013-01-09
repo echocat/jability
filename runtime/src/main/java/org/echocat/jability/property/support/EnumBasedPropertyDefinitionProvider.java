@@ -12,14 +12,23 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.property.support;
+
+import org.echocat.jability.property.PropertyDefinition;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface CapabilityProvider extends Iterable<Capability<?>> {
+import static org.echocat.jability.support.AccessType.PUBLIC;
 
-    @Nullable
-    public <V> Capability<V> provideBy(@Nonnull CapabilityDefinition<V> definition);
+public class EnumBasedPropertyDefinitionProvider<T extends Enum<T> & PropertyDefinition<?>> extends FieldBasedPropertyDefinitionProvider<T> {
+
+    public EnumBasedPropertyDefinitionProvider(@Nonnull Class<T> definitionType) {
+        super(definitionType, PUBLIC);
+    }
+
+    public EnumBasedPropertyDefinitionProvider(@Nullable Iterable<T> definitionType) {
+        super(definitionType);
+    }
 
 }

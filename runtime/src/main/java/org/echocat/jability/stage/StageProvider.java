@@ -12,14 +12,17 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.stage;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface CapabilityProvider extends Iterable<Capability<?>> {
+public interface StageProvider extends Iterable<Stage> {
 
     @Nullable
-    public <V> Capability<V> provideBy(@Nonnull CapabilityDefinition<V> definition);
+    public Stage provideBy(@Nonnull String id);
+
+    @Nullable
+    public Stage provideCurrent();
 
 }

@@ -12,7 +12,7 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.property;
 
 import org.echocat.jability.value.ValueDefinition;
 
@@ -23,28 +23,18 @@ import javax.annotation.concurrent.ThreadSafe;
 
 import static org.echocat.jability.value.support.DefinitionIdUtils.buildCapabilityDefinitionIdFrom;
 
-public interface CapabilityDefinition<V> extends ValueDefinition<V> {
-
-    public boolean isNullable();
+public interface PropertyDefinition<V> extends ValueDefinition<V> {
 
     @ThreadSafe
     @Immutable
-    public static class Impl<V> extends ValueDefinition.Impl<V> implements CapabilityDefinition<V> {
+    public static class Impl<V> extends ValueDefinition.Impl<V> implements PropertyDefinition<V> {
 
-        private final boolean _nullable;
-
-        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull String id, boolean nullable, @Nullable V defaultValue) {
+        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull String id, @Nullable V defaultValue) {
             super(valueType, id, defaultValue);
-            _nullable = nullable;
         }
 
-        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId, boolean nullable, @Nullable V defaultValue) {
-            this(valueType, buildCapabilityDefinitionIdFrom(basedOn, subId), nullable, defaultValue);
-        }
-
-        @Override
-        public boolean isNullable() {
-            return _nullable;
+        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId, @Nullable V defaultValue) {
+            this(valueType, buildCapabilityDefinitionIdFrom(basedOn, subId), defaultValue);
         }
 
         @Override
@@ -52,10 +42,10 @@ public interface CapabilityDefinition<V> extends ValueDefinition<V> {
             final boolean result;
             if (this == o) {
                 result = true;
-            } else if (!(o instanceof CapabilityDefinition)) {
+            } else if (!(o instanceof PropertyDefinition)) {
                 result = false;
             } else {
-                final CapabilityDefinition<?> that = (CapabilityDefinition) o;
+                final PropertyDefinition<?> that = (PropertyDefinition) o;
                 result = getId().equals(that.getId());
             }
             return result;

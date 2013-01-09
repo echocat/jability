@@ -12,9 +12,9 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.property;
 
-import org.echocat.jability.support.FieldBasedCapabilityDefinitionProvider;
+import org.echocat.jability.property.support.FieldBasedPropertyDefinitionProvider;
 import org.echocat.jability.value.CompoundValueDefinitionProvider;
 
 import javax.annotation.Nonnull;
@@ -29,45 +29,45 @@ import static org.echocat.jability.support.DiscoverUtils.discoverTypesOf;
 import static org.echocat.jomon.runtime.CollectionUtils.addAll;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
-public class CompoundCapabilityDefinitionProvider extends CompoundValueDefinitionProvider<CapabilityDefinition<?>, CapabilityDefinitionProvider>  implements CapabilityDefinitionProvider {
+public class CompoundPropertyDefinitionProvider extends CompoundValueDefinitionProvider<PropertyDefinition<?>, PropertyDefinitionProvider>  implements PropertyDefinitionProvider {
 
-    private static final CompoundCapabilityDefinitionProvider INSTANCE = new CompoundCapabilityDefinitionProvider();
+    private static final CompoundPropertyDefinitionProvider INSTANCE = new CompoundPropertyDefinitionProvider();
 
     @Nonnull
-    public static CompoundCapabilityDefinitionProvider capabilityDefinitionProvider() {
+    public static CompoundPropertyDefinitionProvider propertyDefinitionProvider() {
         return INSTANCE;
     }
 
-    public CompoundCapabilityDefinitionProvider(@Nullable Iterable<CapabilityDefinitionProvider> delegates) {
+    public CompoundPropertyDefinitionProvider(@Nullable Iterable<PropertyDefinitionProvider> delegates) {
         super(delegates);
     }
 
-    public CompoundCapabilityDefinitionProvider(@Nullable CapabilityDefinitionProvider... delegates) {
+    public CompoundPropertyDefinitionProvider(@Nullable PropertyDefinitionProvider... delegates) {
         super(delegates);
     }
 
-    public CompoundCapabilityDefinitionProvider(@Nullable ClassLoader classLoader) {
+    public CompoundPropertyDefinitionProvider(@Nullable ClassLoader classLoader) {
         this(loadSystemProviderBy(classLoader));
     }
 
-    public CompoundCapabilityDefinitionProvider() {
+    public CompoundPropertyDefinitionProvider() {
         this((ClassLoader) null);
     }
 
     @Nullable
     @Override
-    public <V> CapabilityDefinition<V> provideBy(@Nonnull Class<V> valueType, @Nonnull String id) {
-        return (CapabilityDefinition<V>) super.provideBy(valueType, id);
+    public <V> PropertyDefinition<V> provideBy(@Nonnull Class<V> valueType, @Nonnull String id) {
+        return (PropertyDefinition<V>) super.provideBy(valueType, id);
     }
 
     @Nonnull
-    public static Iterable<CapabilityDefinitionProvider> loadSystemProviderBy(@Nullable ClassLoader classLoader) {
+    public static Iterable<PropertyDefinitionProvider> loadSystemProviderBy(@Nullable ClassLoader classLoader) {
         final ClassLoader targetClassLoader = classLoader != null ? classLoader : currentThread().getContextClassLoader();
-        final List<CapabilityDefinitionProvider> providers = new ArrayList<>();
-        addAll(providers, load(CapabilityDefinitionProvider.class, targetClassLoader));
+        final List<PropertyDefinitionProvider> providers = new ArrayList<>();
+        addAll(providers, load(PropertyDefinitionProvider.class, targetClassLoader));
         // noinspection rawtypes
-        for (Class<?> currentType : discoverTypesOf(CapabilityDefinition.class, null, targetClassLoader)) {
-            providers.add(new FieldBasedCapabilityDefinitionProvider<>(CapabilityDefinition.class, currentType, PUBLIC));
+        for (Class<?> currentType : discoverTypesOf(PropertyDefinition.class, null, targetClassLoader)) {
+            providers.add(new FieldBasedPropertyDefinitionProvider<>(PropertyDefinition.class, currentType, PUBLIC));
         }
         return asImmutableList(providers);
     }

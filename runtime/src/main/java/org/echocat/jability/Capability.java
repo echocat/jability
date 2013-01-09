@@ -14,15 +14,23 @@
 
 package org.echocat.jability;
 
+import org.echocat.jability.property.PropertyCollection;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface Capability<ID extends CapabilityDefinition<V>, V> {
+public interface Capability<V> {
 
     @Nonnull
-    public ID getId();
+    public CapabilityDefinition<V> getDefinition();
 
     @Nullable
-    public V getValue();
+    public V get();
 
+    public void set(@Nullable V value) throws UnsupportedOperationException;
+
+    public boolean isModifiable();
+
+    @Nonnull
+    public PropertyCollection getProperties();
 }

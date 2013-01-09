@@ -50,6 +50,7 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Common -->
             <dependency>
                 <groupId>org.echocat.jomon</groupId>
                 <artifactId>runtime</artifactId>
@@ -70,8 +71,6 @@
                 <artifactId>cluster</artifactId>
                 <version>${versions.org.echocat.jomon}</version>
             </dependency>
-
-            <!-- Common -->
             <dependency>
                 <groupId>com.google.code.findbugs</groupId>
                 <artifactId>jsr305</artifactId>

@@ -14,10 +14,12 @@
 
 package org.echocat.jability;
 
-import javax.annotation.Nullable;
+public interface CapabilitiesConstants {
 
-public interface ModifiableCapability<ID extends CapabilityDefinition<V>, V> extends Capability<ID, V> {
+    public static final String FALL_BACK_PROVIDER_ENABLED_NAME = CapabilitiesConstants.class.getPackage().getName() + ".fallBackProviderEnabled";
+    public static final boolean FALL_BACK_PROVIDER_ENABLED_DEFAULT = false;
 
-    public void setValue(@Nullable V value);
+    public static final String AUTO_PROPAGATE_NAME = CapabilitiesConstants.class.getPackage().getName() + ".autoPropagate";
+    public static final boolean AUTO_PROPAGATE_DEFAULT = true;
 
 }

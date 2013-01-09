@@ -14,15 +14,21 @@
 
 package org.echocat.jability;
 
+import org.echocat.jability.support.FallbackCapabilityProvider;
 import org.echocat.jomon.runtime.iterators.ChainedIterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
+import static java.lang.Boolean.TRUE;
+import static java.lang.System.getProperty;
 import static java.lang.Thread.currentThread;
 import static java.util.ServiceLoader.load;
+import static org.echocat.jability.CapabilitiesConstants.FALL_BACK_PROVIDER_ENABLED_DEFAULT;
+import static org.echocat.jability.CapabilitiesConstants.FALL_BACK_PROVIDER_ENABLED_NAME;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
@@ -31,7 +37,7 @@ public class CompoundCapabilityProvider implements CapabilityProvider {
     private static final CompoundCapabilityProvider INSTANCE = new CompoundCapabilityProvider();
 
     @Nonnull
-    public static CapabilityProvider capabilityProvider() {
+    public static CompoundCapabilityProvider capabilityProvider() {
         return INSTANCE;
     }
 
@@ -55,10 +61,10 @@ public class CompoundCapabilityProvider implements CapabilityProvider {
 
     @Nullable
     @Override
-    public <ID extends CapabilityDefinition<V>, V, C extends Capability<ID, V>> C provideBy(@Nonnull ID id) {
-        C result = null;
+    public <V> Capability<V> provideBy(@Nonnull CapabilityDefinition<V> definition) {
+        Capability<V> result = null;
         for (CapabilityProvider delegate : _delegates) {
-            result = delegate.provideBy(id);
+            result = delegate.provideBy(definition);
             if (result != null) {
                 break;
             }
@@ -67,8 +73,8 @@ public class CompoundCapabilityProvider implements CapabilityProvider {
     }
 
     @Override
-    public Iterator<Capability<?, ?>> iterator() {
-        return new ChainedIterator<CapabilityProvider, Capability<?, ?>>(_delegates.iterator()) { @Nullable @Override protected Iterator<Capability<?, ?>> nextIterator(@Nullable CapabilityProvider input) {
+    public Iterator<Capability<?>> iterator() {
+        return new ChainedIterator<CapabilityProvider, Capability<?>>(_delegates.iterator()) { @Nullable @Override protected Iterator<Capability<?>> nextIterator(@Nullable CapabilityProvider input) {
             return input.iterator();
         }};
     }
@@ -81,6 +87,23 @@ public class CompoundCapabilityProvider implements CapabilityProvider {
     @Nonnull
     public static Iterable<CapabilityProvider> loadSystemProviderBy(@Nullable ClassLoader classLoader) {
         final ClassLoader targetClassLoader = classLoader != null ? classLoader : currentThread().getContextClassLoader();
-        return asImmutableList(load(CapabilityProvider.class, targetClassLoader));
+        final List<CapabilityProvider> providers = asList(load(CapabilityProvider.class, targetClassLoader));
+        if (isFallBackProviderEnabled()) {
+            providers.add(new FallbackCapabilityProvider());
+        }
+        return asImmutableList(providers);
+    }
+
+    private static boolean isFallBackProviderEnabled() {
+        final String value = getProperty(FALL_BACK_PROVIDER_ENABLED_NAME, Boolean.toString(FALL_BACK_PROVIDER_ENABLED_DEFAULT));
+        return TRUE.toString().equalsIgnoreCase(value);
+    }
+
+    public void clearFallback() {
+        for (CapabilityProvider delegate : _delegates) {
+            if (delegate instanceof FallbackCapabilityProvider) {
+                ((FallbackCapabilityProvider) delegate).clear();
+            }
+        }
     }
 }

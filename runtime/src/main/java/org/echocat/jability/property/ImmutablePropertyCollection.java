@@ -12,14 +12,21 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.property;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
+import java.util.Map;
 
-public interface CapabilityProvider extends Iterable<Capability<?>> {
+@ThreadSafe
+@Immutable
+public class ImmutablePropertyCollection extends PropertyCollectionSupport {
 
-    @Nullable
-    public <V> Capability<V> provideBy(@Nonnull CapabilityDefinition<V> definition);
+    public ImmutablePropertyCollection(@Nullable Map<PropertyDefinition<?>, Object> propertyToValue) {
+        super(propertyToValue);
+    }
+
+    public ImmutablePropertyCollection() {}
 
 }

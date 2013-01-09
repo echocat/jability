@@ -12,8 +12,23 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.stage.support;
 
-public class Jability {
+import org.echocat.jability.stage.Stage;
+
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
+import static org.echocat.jability.support.AccessType.PUBLIC;
+
+public class EnumBasedStageProvider<T extends Enum<T> & Stage> extends FieldBasedStageProvider<T> {
+
+    public EnumBasedStageProvider(@Nonnull Class<T> stageType) {
+        super(stageType, PUBLIC);
+    }
+
+    public EnumBasedStageProvider(@Nullable Iterable<T> stages) {
+        super(stages);
+    }
 
 }

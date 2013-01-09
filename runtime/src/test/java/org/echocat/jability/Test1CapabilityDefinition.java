@@ -17,21 +17,25 @@ package org.echocat.jability;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public enum TestCapabilityDefinition implements CapabilityDefinition<String> {
-    capA(null),
-    capB("defaultValueB");
+public enum Test1CapabilityDefinition implements CapabilityDefinition<String> {
+    capA(null, true),
+    capB("defaultValueB", false),
+    capC(null, false),
+    ;
 
     private final String _id;
     private final String _defaultValue;
+    private final boolean _nullable;
 
-    private TestCapabilityDefinition(@Nullable String defaultValue) {
+    private Test1CapabilityDefinition(@Nullable String defaultValue, boolean nullable) {
         _id = getClass().getPackage().getName() + "." + name();
         _defaultValue = defaultValue;
+        _nullable = nullable;
     }
 
     @Nonnull
     @Override
-    public String get() {
+    public String getId() {
         return _id;
     }
 
@@ -46,4 +50,10 @@ public enum TestCapabilityDefinition implements CapabilityDefinition<String> {
     public String getDefaultValue() {
         return _defaultValue;
     }
+
+    @Override
+    public boolean isNullable() {
+        return _nullable;
+    }
+
 }

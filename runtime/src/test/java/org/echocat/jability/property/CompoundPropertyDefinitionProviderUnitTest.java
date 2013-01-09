@@ -12,37 +12,40 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability;
+package org.echocat.jability.property;
 
+import org.echocat.jability.stage.Stage;
 import org.junit.Test;
 
-import static org.echocat.jability.CompoundCapabilityDefinitionProvider.capabilityDefinitionProvider;
-import static org.echocat.jability.Test1CapabilityDefinition.*;
+import java.util.Date;
+
+import static org.echocat.jability.property.CompoundPropertyDefinitionProvider.propertyDefinitionProvider;
+import static org.echocat.jability.property.Properties.*;
 import static org.echocat.jomon.testing.Assert.assertThat;
 import static org.echocat.jomon.testing.BaseMatchers.is;
 import static org.echocat.jomon.testing.BaseMatchers.isSameAs;
 import static org.junit.Assert.fail;
 
-public class CompoundCapabilityDefinitionProviderUnitTest {
+public class CompoundPropertyDefinitionProviderUnitTest {
 
     @Test
     public void test() throws Exception {
-        assertThat(capabilityDefinitionProvider().provideBy(String.class, capA.getId()), isSameAs((Object) capA));
-        assertThat(capabilityDefinitionProvider().provideBy(String.class, capB.getId()), isSameAs((Object) capB));
-        assertThat(capabilityDefinitionProvider().provideBy(String.class, capC.getId()), isSameAs((Object) capC));
+        assertThat(propertyDefinitionProvider().provideBy(Date.class, validFrom.getId()), isSameAs(validFrom));
+        assertThat(propertyDefinitionProvider().provideBy(Date.class, validTo.getId()), isSameAs(validTo));
+        assertThat(propertyDefinitionProvider().provideBy(Stage.class, minimumRequiredStage.getId()), isSameAs(minimumRequiredStage));
     }
 
     @Test
     public void testWrongType() throws Exception {
         try {
-            capabilityDefinitionProvider().provideBy(Integer.class, capA.getId());
+            propertyDefinitionProvider().provideBy(String.class, validFrom.getId());
             fail("expected exception missing");
         } catch (IllegalArgumentException expected) {}
     }
 
     @Test
     public void testNotExisting() throws Exception {
-        assertThat(capabilityDefinitionProvider().provideBy(String.class, capA.getId() + "x"), is(null));
+        assertThat(propertyDefinitionProvider().provideBy(String.class, validFrom.getId() + "x"), is(null));
     }
 
 }
