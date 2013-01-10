@@ -22,6 +22,7 @@ import static org.echocat.jability.stage.Stage.Impl;
 @SuppressWarnings("ConstantNamingConvention")
 public class Stages {
 
+    public static final Stage unknown = newStage("unknown", 0);
     public static final Stage development = newStage("development", 100000);
     public static final Stage integration = newStage("integration", 200000);
     public static final Stage alpha = newStage("alpha", 300000);

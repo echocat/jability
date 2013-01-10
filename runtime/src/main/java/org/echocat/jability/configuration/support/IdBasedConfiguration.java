@@ -12,17 +12,28 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.stage;
+package org.echocat.jability.configuration.support;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlAttribute;
 
-public interface StageProvider extends Iterable<Stage> {
+import static org.echocat.jability.support.DiscoverUtils.nameOf;
 
-    @Nullable
-    public Stage provideBy(@Nonnull String id);
+public abstract class IdBasedConfiguration extends BaseConfiguration {
 
-    @Nonnull
-    public Stage provideCurrent();
+    private String _id;
+
+    @XmlAttribute(name = "id")
+    public String getId() {
+        return _id;
+    }
+
+    public void setId(String id) {
+        _id = id;
+    }
+
+    @Override
+    public String toString() {
+        return nameOf(this) + "(" + getId() + ")";
+    }
 
 }

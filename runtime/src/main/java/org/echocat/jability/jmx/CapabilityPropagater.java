@@ -26,8 +26,12 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import static java.lang.Boolean.TRUE;
 import static java.lang.Runtime.getRuntime;
+import static java.lang.System.getProperty;
 import static java.lang.management.ManagementFactory.getPlatformMBeanServer;
+import static org.echocat.jability.CapabilitiesConstants.AUTO_PROPAGATE_DEFAULT;
+import static org.echocat.jability.CapabilitiesConstants.AUTO_PROPAGATE_NAME;
 import static org.echocat.jability.CompoundCapabilityDefinitionProvider.capabilityDefinitionProvider;
 import static org.echocat.jability.CompoundCapabilityProvider.capabilityProvider;
 import static org.echocat.jomon.runtime.concurrent.ThreadUtils.stop;
@@ -54,6 +58,18 @@ public class CapabilityPropagater implements AutoCloseable {
             }
         }
     }
+
+    public static void registerSystemPropagaterIfAutoPropagateEnabled() {
+        if (isAutoPropagateEnabled()) {
+            registerSystemPropagater();
+        }
+    }
+
+    public static boolean isAutoPropagateEnabled() {
+        final String value = getProperty(AUTO_PROPAGATE_NAME, Boolean.toString(AUTO_PROPAGATE_DEFAULT));
+        return TRUE.toString().equalsIgnoreCase(value);
+    }
+
 
     private final MBeanServer _server;
     private final CapabilityDefinitionProvider _capabilityDefinitionProvider;

@@ -26,6 +26,7 @@ import java.util.List;
 
 import static java.lang.Thread.currentThread;
 import static java.util.ServiceLoader.load;
+import static org.echocat.jability.stage.Stages.unknown;
 import static org.echocat.jability.support.AccessType.PUBLIC;
 import static org.echocat.jability.support.DiscoverUtils.discoverTypesOf;
 import static org.echocat.jomon.runtime.CollectionUtils.*;
@@ -60,11 +61,13 @@ public class CompoundStageProvider implements StageProvider {
     @Nullable
     @Override
     public Stage provideBy(@Nonnull String id) {
-        Stage result = null;
-        for (StageProvider delegate : _delegates) {
-            result = delegate.provideBy(id);
-            if (result != null) {
-                break;
+        Stage result = unknown.getId().equals(id) ? unknown : null;
+        if (result == null) {
+            for (StageProvider delegate : _delegates) {
+                result = delegate.provideBy(id);
+                if (result != null) {
+                    break;
+                }
             }
         }
         return result;
@@ -80,7 +83,7 @@ public class CompoundStageProvider implements StageProvider {
                 break;
             }
         }
-        return result;
+        return result != null ? result : unknown;
     }
 
     @Override

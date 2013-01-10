@@ -12,17 +12,25 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.stage;
+package org.echocat.jability.configuration.stage;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.echocat.jability.configuration.support.IdBasedConfiguration;
 
-public interface StageProvider extends Iterable<Stage> {
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
 
-    @Nullable
-    public Stage provideBy(@Nonnull String id);
+@XmlType(name = "stage")
+public class StageConfiguration extends IdBasedConfiguration {
 
-    @Nonnull
-    public Stage provideCurrent();
+    private int _priority;
+
+    @XmlAttribute(name = "priority")
+    public int getPriority() {
+        return _priority;
+    }
+
+    public void setPriority(int priority) {
+        _priority = priority;
+    }
 
 }

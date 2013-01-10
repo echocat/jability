@@ -12,17 +12,11 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.stage;
+package org.echocat.jability.configuration.capability;
 
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import org.echocat.jability.configuration.support.BaseValueDefinitionConfiguration;
 
-public interface StageProvider extends Iterable<Stage> {
+import javax.xml.bind.annotation.XmlType;
 
-    @Nullable
-    public Stage provideBy(@Nonnull String id);
-
-    @Nonnull
-    public Stage provideCurrent();
-
-}
+@XmlType(name = "capabilityDefinition")
+public class CapabilityDefinitionConfiguration extends BaseValueDefinitionConfiguration {}

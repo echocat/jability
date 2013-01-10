@@ -14,18 +14,13 @@
 
 package org.echocat.jability;
 
-import org.echocat.jability.jmx.CapabilityPropagater;
-
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Comparator;
 
-import static java.lang.Boolean.TRUE;
-import static java.lang.System.getProperty;
-import static org.echocat.jability.CapabilitiesConstants.AUTO_PROPAGATE_DEFAULT;
-import static org.echocat.jability.CapabilitiesConstants.AUTO_PROPAGATE_NAME;
 import static org.echocat.jability.CompoundCapabilityDefinitionProvider.capabilityDefinitionProvider;
 import static org.echocat.jability.CompoundCapabilityProvider.capabilityProvider;
+import static org.echocat.jability.jmx.CapabilityPropagater.registerSystemPropagaterIfAutoPropagateEnabled;
 import static org.echocat.jability.value.Values.valueDefinitionComparator;
 
 public class Capabilities {
@@ -34,9 +29,7 @@ public class Capabilities {
     private static CapabilityProvider c_capabilityProvider = capabilityProvider();
 
     static {
-        if (isAutoPropagateEnabled()) {
-            CapabilityPropagater.registerSystemPropagater();
-        }
+        registerSystemPropagaterIfAutoPropagateEnabled();
     }
 
     /**
@@ -153,15 +146,6 @@ public class Capabilities {
         return c_capabilityProvider;
     }
 
-    public static void setCapabilityProvider(@Nullable CapabilityProvider capabilityProvider) {
-        c_capabilityProvider = capabilityProvider != null ? capabilityProvider : capabilityProvider();
-    }
-
-    public static boolean isAutoPropagateEnabled() {
-        final String value = getProperty(AUTO_PROPAGATE_NAME, Boolean.toString(AUTO_PROPAGATE_DEFAULT));
-        return TRUE.toString().equalsIgnoreCase(value);
-    }
-
     @Nonnull
     public static <V> CapabilityDefinition<V> newCapabilityDefinition(@Nonnull Class<? extends V> valueType, @Nonnull String id, boolean nullable, @Nullable V defaultValue) {
         return new CapabilityDefinition.Impl<>(valueType, id, nullable, defaultValue);
@@ -195,6 +179,10 @@ public class Capabilities {
     @Nonnull
     public static Comparator<CapabilityDefinition<?>> capabilityDefinitionComparator() {
         return valueDefinitionComparator();
+    }
+
+    public static void setCapabilityProvider(@Nullable CapabilityProvider capabilityProvider) {
+        c_capabilityProvider = capabilityProvider != null ? capabilityProvider : capabilityProvider();
     }
 
     private Capabilities() {}

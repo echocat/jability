@@ -16,6 +16,7 @@ package org.echocat.jability.support;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.bind.annotation.XmlType;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.net.URL;
@@ -77,6 +78,17 @@ public class DiscoverUtils {
             final ClassLoader targetClassLoader = classLoader != null ? classLoader : currentThread().getContextClassLoader();
             return new TypeIterator<>(baseType, expectedType, targetClassLoader);
         }};
+    }
+
+    @Nonnull
+    public static String nameOf(@Nonnull Object o) {
+        return nameOf(o.getClass());
+    }
+
+    @Nonnull
+    public static String nameOf(@Nonnull Class<?> type) {
+        final XmlType xmlType = type.getAnnotation(XmlType.class);
+        return xmlType != null && !"##default".equals(xmlType.name()) ? xmlType.name() : type.getSimpleName();
     }
 
     private static class TypeIterator<T> implements Iterator<Class<? extends T>> {
