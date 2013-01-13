@@ -19,4 +19,4 @@ import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "stageProvider")
-public class StageProviderConfiguration extends TypeBasedConfiguration {}
+public class StageProviderConfiguration extends TypeBasedConfiguration implements UnderStagesRootConfiguration {}

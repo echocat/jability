@@ -14,51 +14,33 @@
 
 package org.echocat.jability.property;
 
-import org.echocat.jability.stage.Stage;
-import org.echocat.jomon.runtime.annotations.Excluding;
-import org.echocat.jomon.runtime.annotations.Including;
+import org.echocat.jability.Capability;
+import org.echocat.jability.value.Values;
+import org.echocat.jomon.runtime.util.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Comparator;
-import java.util.Date;
+import java.util.Iterator;
 
-import static org.echocat.jability.value.Values.valueDefinitionComparator;
+public interface Properties extends Values {
 
-@SuppressWarnings("ConstantNamingConvention")
-public class Properties {
+    @Nullable
+    public <V> V get(@Nonnull Capability<?> capability, @Nonnull Property<V> property, @Nullable V defaultValue);
 
-    @Including
-    public static final PropertyDefinition<Date> validFrom = newPropertyDefinition(Date.class, PropertyDefinition.class, "validFrom");
-    @Excluding
-    public static final PropertyDefinition<Date> validTo = newPropertyDefinition(Date.class, PropertyDefinition.class, "validTo");
-    @Including
-    public static final PropertyDefinition<Stage> minimumRequiredStage = newPropertyDefinition(Stage.class, PropertyDefinition.class, "minimumRequiredStage");
+    @Nullable
+    public <V> V get(@Nonnull Capability<?> capability, @Nonnull Property<V> property);
 
-    @Nonnull
-    public static <V> PropertyDefinition<V> newPropertyDefinition(@Nonnull Class<? extends V> valueType, @Nonnull String id, @Nullable V defaultValue) {
-        return new PropertyDefinition.Impl<>(valueType, id, defaultValue);
-    }
+    public boolean isEnabled(@Nonnull Capability<?> capability, @Nonnull Property<Boolean> property, @Nullable Boolean defaultValue);
 
-    @Nonnull
-    public static <V> PropertyDefinition<V> newPropertyDefinition(@Nonnull Class<? extends V> valueType, @Nonnull String id) {
-        return newPropertyDefinition(valueType, id, null);
-    }
+    public boolean isEnabled(@Nonnull Capability<?> capability, @Nonnull Property<Boolean> property);
+
+    public <V> void set(@Nonnull Capability<?> capability, @Nonnull Property<V> property, @Nullable V value) throws UnsupportedOperationException;
+
+    public void remove(@Nonnull Capability<?> capability, @Nonnull Property<?> property) throws UnsupportedOperationException;
+
+    public boolean isModifiable(@Nonnull Capability<?> capability, @Nonnull Property<?> property);
 
     @Nonnull
-    public static <V> PropertyDefinition<V> newPropertyDefinition(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId, @Nullable V defaultValue) {
-        return new PropertyDefinition.Impl<>(valueType, basedOn, subId, defaultValue);
-    }
+    public Iterator<Entry<Property<?>, Object>> iterator(@Nonnull Capability<?> capability);
 
-    @Nonnull
-    public static <V> PropertyDefinition<V> newPropertyDefinition(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId) {
-        return newPropertyDefinition(valueType, basedOn, subId, null);
-    }
-
-    @Nonnull
-    public static Comparator<PropertyDefinition<?>> propertyDefinitionComparator() {
-        return valueDefinitionComparator();
-    }
-
-    private Properties() {}
 }

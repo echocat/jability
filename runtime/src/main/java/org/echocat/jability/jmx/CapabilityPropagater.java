@@ -15,9 +15,7 @@
 package org.echocat.jability.jmx;
 
 import org.echocat.jability.Capability;
-import org.echocat.jability.CapabilityDefinition;
-import org.echocat.jability.CapabilityDefinitionProvider;
-import org.echocat.jability.CapabilityProvider;
+import org.echocat.jability.Jability;
 import org.echocat.jomon.runtime.util.Duration;
 
 import javax.annotation.Nonnull;
@@ -26,74 +24,28 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
-import static java.lang.Boolean.TRUE;
-import static java.lang.Runtime.getRuntime;
-import static java.lang.System.getProperty;
 import static java.lang.management.ManagementFactory.getPlatformMBeanServer;
-import static org.echocat.jability.CapabilitiesConstants.AUTO_PROPAGATE_DEFAULT;
-import static org.echocat.jability.CapabilitiesConstants.AUTO_PROPAGATE_NAME;
-import static org.echocat.jability.CompoundCapabilityDefinitionProvider.capabilityDefinitionProvider;
-import static org.echocat.jability.CompoundCapabilityProvider.capabilityProvider;
 import static org.echocat.jomon.runtime.concurrent.ThreadUtils.stop;
-import static org.echocat.jomon.runtime.util.ResourceUtils.closeQuietly;
 
 public class CapabilityPropagater implements AutoCloseable {
 
-    private static CapabilityPropagater c_systemInstance;
-
-    static {
-        getRuntime().addShutdownHook(new Thread(CapabilityPropagater.class.getName() + ".Shotdown") { @Override public void run() {
-            synchronized (CapabilityProvider.class) {
-                if (c_systemInstance != null) {
-                    closeQuietly(c_systemInstance);
-                }
-            }
-        }});
-    }
-
-    public static void registerSystemPropagater() {
-        synchronized (CapabilityPropagater.class) {
-            if (c_systemInstance == null) {
-                c_systemInstance = new CapabilityPropagater();
-            }
-        }
-    }
-
-    public static void registerSystemPropagaterIfAutoPropagateEnabled() {
-        if (isAutoPropagateEnabled()) {
-            registerSystemPropagater();
-        }
-    }
-
-    public static boolean isAutoPropagateEnabled() {
-        final String value = getProperty(AUTO_PROPAGATE_NAME, Boolean.toString(AUTO_PROPAGATE_DEFAULT));
-        return TRUE.toString().equalsIgnoreCase(value);
-    }
-
-
     private final MBeanServer _server;
-    private final CapabilityDefinitionProvider _capabilityDefinitionProvider;
-    private final CapabilityProvider _capabilityProvider;
+    private final Jability _jability;
 
     private final Refresher _refresher = new Refresher();
-    private final Set<CapabilityDefinition<?>> _knownDefinitions = new HashSet<>();
+    private final Set<Capability<?>> _knownCapabilities = new HashSet<>();
 
     private Duration _indexRefreshDuration = new Duration("10s");
 
-    public CapabilityPropagater(@Nonnull MBeanServer server, @Nonnull CapabilityDefinitionProvider capabilityDefinitionProvider, @Nonnull CapabilityProvider capabilityProvider) {
+    public CapabilityPropagater(@Nonnull MBeanServer server, @Nonnull Jability jability) {
         _server = server;
-        _capabilityDefinitionProvider = capabilityDefinitionProvider;
-        _capabilityProvider = capabilityProvider;
+        _jability = jability;
         refresh();
         _refresher.start();
     }
 
-    public CapabilityPropagater(@Nonnull CapabilityDefinitionProvider capabilityDefinitionProvider, @Nonnull CapabilityProvider capabilityProvider) {
-        this(getPlatformMBeanServer(), capabilityDefinitionProvider, capabilityProvider);
-    }
-
-    public CapabilityPropagater() {
-        this(capabilityDefinitionProvider(), capabilityProvider());
+    public CapabilityPropagater(@Nonnull Jability jability) {
+        this(getPlatformMBeanServer(), jability);
     }
 
     @Nonnull
@@ -107,63 +59,63 @@ public class CapabilityPropagater implements AutoCloseable {
 
     public void refresh() {
         synchronized (this) {
-            final Set<CapabilityDefinition<?>> newDefinitions = new HashSet<>();
+            final Set<Capability<?>> newCapabilities = new HashSet<>();
             boolean success = false;
             try {
-                for (CapabilityDefinition<?> definition : _capabilityDefinitionProvider) {
-                    if (_knownDefinitions.contains(definition)) {
-                        register(definition);
+                for (Capability<?> capability : _jability.getCapabilityProvider()) {
+                    if (_knownCapabilities.contains(capability)) {
+                        register(capability);
                     }
-                    newDefinitions.add(definition);
+                    newCapabilities.add(capability);
                 }
                 success = true;
             } finally {
                 if (!success) {
-                    for (CapabilityDefinition<?> definition : newDefinitions) {
+                    for (Capability<?> capability : newCapabilities) {
                         try {
-                            unregister(definition);
+                            unregister(capability);
                         } catch (Exception ignored) {}
                     }
                 }
             }
-            final Iterator<CapabilityDefinition<?>> i = _knownDefinitions.iterator();
+            final Iterator<Capability<?>> i = _knownCapabilities.iterator();
             while (i.hasNext()) {
-                final CapabilityDefinition<?> oldDefinition = i.next();
-                if (!newDefinitions.contains(oldDefinition)) {
+                final Capability<?> oldCapabilities = i.next();
+                if (!newCapabilities.contains(oldCapabilities)) {
                     i.remove();
                 }
             }
-            _knownDefinitions.addAll(newDefinitions);
+            _knownCapabilities.addAll(newCapabilities);
         }
     }
 
-    protected void register(@Nonnull CapabilityDefinition<?> definition) {
-        final CapabilityDynamicMBean mBean = new CapabilityDynamicMBean(definition, _capabilityProvider);
-        final ObjectName name = buildNameFor(definition);
+    protected void register(@Nonnull Capability<?> capability) {
+        final CapabilityDynamicMBean mBean = new CapabilityDynamicMBean(capability, _jability.getCapabilities());
+        final ObjectName name = buildNameFor(capability);
         try {
             _server.registerMBean(mBean, name);
         } catch (InstanceAlreadyExistsException ignored) {
         } catch (Exception e) {
-            throw new RuntimeException("Could not register mBean for definition " + definition + " under name '" + name + "'.", e);
+            throw new RuntimeException("Could not register mBean for capability " + capability + " under name '" + name + "'.", e);
         }
     }
 
-    protected void unregister(@Nonnull CapabilityDefinition<?> definition) {
-        final ObjectName name = buildNameFor(definition);
+    protected void unregister(@Nonnull Capability<?> capability) {
+        final ObjectName name = buildNameFor(capability);
         try {
             _server.unregisterMBean(name);
         } catch (InstanceNotFoundException ignored) {
         } catch (Exception e) {
-            throw new RuntimeException("Could not unregister mBean for definition " + definition + " with name '" + name + "'.", e);
+            throw new RuntimeException("Could not unregister mBean for capability " + capability + " with name '" + name + "'.", e);
         }
     }
 
     @Nonnull
-    protected ObjectName buildNameFor(@Nonnull CapabilityDefinition<?> definition) {
+    protected ObjectName buildNameFor(@Nonnull Capability<?> capability) {
         try {
-            return new ObjectName(Capability.class.getPackage().getName() + ":type=" + normalize(definition.getId()));
+            return new ObjectName(Capability.class.getPackage().getName() + ":type=" + normalize(capability.getId()));
         } catch (MalformedObjectNameException e) {
-            throw new IllegalArgumentException("Could not from from the id of " + definition + " a valid object name.", e);
+            throw new IllegalArgumentException("Could not from from the id of " + capability + " a valid object name.", e);
         }
     }
 

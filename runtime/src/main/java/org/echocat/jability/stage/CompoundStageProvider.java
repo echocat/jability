@@ -14,55 +14,48 @@
 
 package org.echocat.jability.stage;
 
-import org.echocat.jability.stage.support.FieldBasedStageProvider;
 import org.echocat.jomon.runtime.iterators.ChainedIterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
-import static java.lang.Thread.currentThread;
-import static java.util.ServiceLoader.load;
 import static org.echocat.jability.stage.Stages.unknown;
-import static org.echocat.jability.support.AccessType.PUBLIC;
-import static org.echocat.jability.support.DiscoverUtils.discoverTypesOf;
-import static org.echocat.jomon.runtime.CollectionUtils.*;
+import static org.echocat.jomon.runtime.CollectionUtils.asImmutableSet;
 
 public class CompoundStageProvider implements StageProvider {
 
-    private static final CompoundStageProvider INSTANCE = new CompoundStageProvider();
-
-    @Nonnull
-    public static CompoundStageProvider stageProvider() {
-        return INSTANCE;
-    }
-
     private final Iterable<StageProvider> _delegates;
 
-    public CompoundStageProvider(@Nullable Iterable<StageProvider> delegates) {
+    private final Set<String> _availableIds;
+    private final Stage _current;
+
+    public CompoundStageProvider(@Nullable Iterable<StageProvider> delegates, @Nullable Iterable<String> availableIds, @Nullable Stage current) {
         _delegates = delegates != null ? delegates : Collections.<StageProvider>emptyList();
+        _availableIds = availableIds != null ? asImmutableSet(availableIds) : null;
+        _current = current;
     }
 
-    public CompoundStageProvider(@Nullable StageProvider... delegates) {
-        this(delegates != null ? asList(delegates) : null);
-    }
-
-    public CompoundStageProvider(@Nullable ClassLoader classLoader) {
-        this(loadSystemProviderBy(classLoader));
-    }
-
-    public CompoundStageProvider() {
-        this((ClassLoader) null);
+    public CompoundStageProvider(@Nullable Iterable<StageProvider> delegates, @Nullable Iterable<String> availableIds, @Nullable String currentId) {
+        _delegates = delegates != null ? delegates : Collections.<StageProvider>emptyList();
+        _availableIds = availableIds != null ? asImmutableSet(availableIds) : null;
+        if (currentId != null) {
+            _current = provideBy(currentId);
+            if (_current == null) {
+                throw new IllegalArgumentException("Current stage '" + currentId + "' could not be resolved.");
+            }
+        } else {
+            _current = null;
+        }
     }
 
     @Nullable
     @Override
     public Stage provideBy(@Nonnull String id) {
         Stage result = unknown.getId().equals(id) ? unknown : null;
-        if (result == null) {
+        if (result == null && (_availableIds == null || _availableIds.contains(id))) {
             for (StageProvider delegate : _delegates) {
                 result = delegate.provideBy(id);
                 if (result != null) {
@@ -76,11 +69,13 @@ public class CompoundStageProvider implements StageProvider {
     @Nullable
     @Override
     public Stage provideCurrent() {
-        Stage result = null;
-        for (StageProvider delegate : _delegates) {
-            result = delegate.provideCurrent();
-            if (result != null) {
-                break;
+        Stage result = _current;
+        if (result != null) {
+            for (StageProvider delegate : _delegates) {
+                result = delegate.provideCurrent();
+                if (result != null) {
+                    break;
+                }
             }
         }
         return result != null ? result : unknown;
@@ -91,22 +86,6 @@ public class CompoundStageProvider implements StageProvider {
         return new ChainedIterator<StageProvider, Stage>(_delegates.iterator()) { @Nullable @Override protected Iterator<Stage> nextIterator(@Nullable StageProvider input) {
             return input.iterator();
         }};
-    }
-
-    @Nonnull
-    public static Iterable<StageProvider> loadSystemProviderBy() {
-        return loadSystemProviderBy(null);
-    }
-
-    @Nonnull
-    public static Iterable<StageProvider> loadSystemProviderBy(@Nullable ClassLoader classLoader) {
-        final ClassLoader targetClassLoader = classLoader != null ? classLoader : currentThread().getContextClassLoader();
-        final List<StageProvider> providers = new ArrayList<>();
-        addAll(providers, load(StageProvider.class, targetClassLoader));
-        for (Class<?> type : discoverTypesOf(Stage.class, null, targetClassLoader)) {
-            providers.add(new FieldBasedStageProvider<>(Stage.class, type, PUBLIC));
-        }
-        return asImmutableList(providers);
     }
 
 }

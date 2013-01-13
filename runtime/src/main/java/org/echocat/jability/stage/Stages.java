@@ -14,35 +14,16 @@
 
 package org.echocat.jability.stage;
 
-import javax.annotation.Nonnull;
-
-import static org.echocat.jability.stage.CompoundStageProvider.stageProvider;
-import static org.echocat.jability.stage.Stage.Impl;
+import org.echocat.jability.stage.support.StageUtils;
 
 @SuppressWarnings("ConstantNamingConvention")
-public class Stages {
+public interface Stages {
 
-    public static final Stage unknown = newStage("unknown", 0);
-    public static final Stage development = newStage("development", 100000);
-    public static final Stage integration = newStage("integration", 200000);
-    public static final Stage alpha = newStage("alpha", 300000);
-    public static final Stage beta = newStage("beta", 400000);
-    public static final Stage productive = newStage("productive", 500000);
-
-    @Nonnull
-    public static Stage newStage(@Nonnull String id, int priority) {
-        return new Impl(id, priority);
-    }
-
-    @Nonnull
-    public static Stage stage(@Nonnull String id) throws IllegalArgumentException {
-        final Stage stage = stageProvider().provideBy(id);
-        if (stage == null) {
-            throw new IllegalArgumentException("There is no stage with id '" + id + "'.");
-        }
-        return stage;
-    }
-
-    private Stages() {}
+    public static final Stage unknown = StageUtils.newStage("unknown", 0);
+    public static final Stage development = StageUtils.newStage("development", 100000);
+    public static final Stage integration = StageUtils.newStage("integration", 200000);
+    public static final Stage alpha = StageUtils.newStage("alpha", 300000);
+    public static final Stage beta = StageUtils.newStage("beta", 400000);
+    public static final Stage productive = StageUtils.newStage("productive", 500000);
 
 }

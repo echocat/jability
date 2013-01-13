@@ -14,34 +14,9 @@
 
 package org.echocat.jability.configuration.property;
 
-import org.echocat.jability.configuration.support.BaseConfiguration;
+import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 
-import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
-import java.util.List;
 
-@XmlType(name = "properties", propOrder = {"definitions", "definitionProviders"})
-public class PropertiesConfiguration extends BaseConfiguration {
-
-    private List<PropertyDefinitionConfiguration> _definitions;
-    private List<PropertyDefinitionProviderConfiguration> _definitionProviders;
-
-    @XmlElement(name = "definition")
-    public List<PropertyDefinitionConfiguration> getDefinitions() {
-        return _definitions;
-    }
-
-    public void setDefinitions(List<PropertyDefinitionConfiguration> definitions) {
-        _definitions = definitions;
-    }
-
-    @XmlElement(name = "definitionProvider")
-    public List<PropertyDefinitionProviderConfiguration> getDefinitionProviders() {
-        return _definitionProviders;
-    }
-
-    public void setDefinitionProviders(List<PropertyDefinitionProviderConfiguration> definitionProviders) {
-        _definitionProviders = definitionProviders;
-    }
-
-}
+@XmlType(name = "properties")
+public class PropertiesConfiguration extends TypeBasedConfiguration implements UnderPropertiesRootConfiguration {}

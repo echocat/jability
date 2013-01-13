@@ -15,6 +15,7 @@
 package org.echocat.jability.stage.support;
 
 import org.echocat.jability.stage.Stage;
+import org.echocat.jability.stage.Stage.Impl;
 
 import javax.annotation.Nonnull;
 import java.util.Comparator;
@@ -41,4 +42,9 @@ public class StageUtils {
     }
 
     private StageUtils() {}
+
+    @Nonnull
+    public static Stage newStage(@Nonnull String id, int priority) {
+        return new Impl(id, priority);
+    }
 }

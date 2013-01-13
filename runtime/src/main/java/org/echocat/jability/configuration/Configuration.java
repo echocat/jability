@@ -14,58 +14,87 @@
 
 package org.echocat.jability.configuration;
 
-import org.echocat.jability.configuration.capability.CapabilitiesConfiguration;
-import org.echocat.jability.configuration.jmx.JmxConfiguration;
-import org.echocat.jability.configuration.property.PropertiesConfiguration;
-import org.echocat.jability.configuration.stage.StagesConfiguration;
+import org.echocat.jability.configuration.capability.CapabilitiesRootConfiguration;
+import org.echocat.jability.configuration.jmx.JmxRootConfiguration;
+import org.echocat.jability.configuration.property.PropertiesRootConfiguration;
+import org.echocat.jability.configuration.stage.StagesRootConfiguration;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
+
+import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 @XmlRootElement(name = "configuration")
 @XmlType(name = "configuration", propOrder = {"capabilities", "stages", "properties", "jmx"})
 public class Configuration {
 
-    private CapabilitiesConfiguration _capabilities;
-    private StagesConfiguration _stages;
-    private PropertiesConfiguration _properties;
-    private JmxConfiguration _jmx;
+    private CapabilitiesRootConfiguration _capabilities;
+    private StagesRootConfiguration _stages;
+    private PropertiesRootConfiguration _properties;
+    private JmxRootConfiguration _jmx;
 
     @XmlElement(name = "capabilities")
-    public CapabilitiesConfiguration getCapabilities() {
+    public CapabilitiesRootConfiguration getCapabilities() {
         return _capabilities;
     }
 
-    public void setCapabilities(CapabilitiesConfiguration capabilities) {
+    public void setCapabilities(CapabilitiesRootConfiguration capabilities) {
         _capabilities = capabilities;
     }
 
     @XmlElement(name = "stages")
-    public StagesConfiguration getStages() {
+    public StagesRootConfiguration getStages() {
         return _stages;
     }
 
-    public void setStages(StagesConfiguration stages) {
+    public void setStages(StagesRootConfiguration stages) {
         _stages = stages;
     }
 
     @XmlElement(name = "properties")
-    public PropertiesConfiguration getProperties() {
+    public PropertiesRootConfiguration getProperties() {
         return _properties;
     }
 
-    public void setProperties(PropertiesConfiguration properties) {
+    public void setProperties(PropertiesRootConfiguration properties) {
         _properties = properties;
     }
 
     @XmlElement(name = "jmx")
-    public JmxConfiguration getJmx() {
+    public JmxRootConfiguration getJmx() {
         return _jmx;
     }
 
-    public void setJmx(JmxConfiguration jmx) {
+    public void setJmx(JmxRootConfiguration jmx) {
         _jmx = jmx;
+    }
+
+    @Nonnull
+    public Configuration with(@Nullable UnderConfiguration... what) {
+        return with(asList(what));
+    }
+
+    @Nonnull
+    public Configuration with(@Nullable Iterable<UnderConfiguration> what) {
+        if (what != null) {
+            for (UnderConfiguration configuration : what) {
+                if (configuration instanceof CapabilitiesRootConfiguration) {
+                    _capabilities = (CapabilitiesRootConfiguration) configuration;
+                } else if (configuration instanceof StagesRootConfiguration) {
+                    _stages = (StagesRootConfiguration) configuration;
+                } else if (configuration instanceof PropertiesRootConfiguration) {
+                    _properties = (PropertiesRootConfiguration) configuration;
+                } else if (configuration instanceof JmxRootConfiguration) {
+                    _jmx = (JmxRootConfiguration) configuration;
+                } else {
+                    throw new IllegalArgumentException("Could not handle configuration: "  + configuration);
+                }
+            }
+        }
+        return this;
     }
 
 }

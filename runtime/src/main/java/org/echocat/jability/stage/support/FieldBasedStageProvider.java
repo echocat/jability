@@ -14,64 +14,31 @@
 
 package org.echocat.jability.stage.support;
 
-import org.echocat.jability.support.AccessType;
+import org.echocat.jability.configuration.stage.StageReferenceConfiguration;
 import org.echocat.jability.stage.Stage;
-import org.echocat.jability.stage.StageProvider;
+import org.echocat.jability.support.AccessType;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.Collection;
+import java.util.regex.Pattern;
 
-import static java.util.Collections.unmodifiableMap;
 import static org.echocat.jability.support.DiscoverUtils.discoverStaticFieldValuesBy;
+import static org.echocat.jability.support.DiscoverUtils.loadClassBy;
 
-public class FieldBasedStageProvider<T extends Stage> implements StageProvider {
+public class FieldBasedStageProvider<T extends Stage> extends BaseStageProvider<T> {
 
-    private final Map<String, T> _idToStage;
-
-    public FieldBasedStageProvider(@Nonnull Class<? extends T> stageType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable AccessType... accessTypes) {
-        this(discoverStaticFieldValuesBy(stageType, startFrom, stopAt, accessTypes));
+    public FieldBasedStageProvider(@Nonnull Class<? extends T> stageType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldPattern, @Nullable AccessType... accessTypes) {
+        super(discoverStaticFieldValuesBy(stageType, startFrom, stopAt, fieldPattern, accessTypes));
     }
 
-    public FieldBasedStageProvider(@Nonnull Class<? extends T> stageType, @Nonnull Class<?> startFrom, @Nullable AccessType... accessTypes) {
-        this(discoverStaticFieldValuesBy(stageType, startFrom, accessTypes));
+    public FieldBasedStageProvider(@Nonnull Class<? extends T> stageType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldPattern, @Nullable Collection<AccessType> accessTypes) {
+        super(discoverStaticFieldValuesBy(stageType, startFrom, stopAt, fieldPattern, accessTypes));
     }
 
-    public FieldBasedStageProvider(@Nonnull Class<? extends T> stageType, @Nullable AccessType... accessTypes) {
-        this(discoverStaticFieldValuesBy(stageType, accessTypes));
-    }
-
-    protected FieldBasedStageProvider(@Nullable Iterable<T> stages) {
-        _idToStage = toIdToStage(stages);
-    }
-
-    @Override
-    public Stage provideBy(@Nonnull String id) {
-        return _idToStage.get(id);
-    }
-
-    @Override
-    public Stage provideCurrent() {
-        return null;
-    }
-
-    @Override
-    public Iterator<Stage> iterator() {
+    public FieldBasedStageProvider(@Nullable ClassLoader classLoader, @Nonnull StageReferenceConfiguration configuration) {
         // noinspection unchecked
-        return (Iterator<Stage>) _idToStage.values().iterator();
-    }
-
-    @Nonnull
-    protected Map<String, T> toIdToStage(@Nullable Iterable<T> stages) {
-        final Map<String, T> result = new LinkedHashMap<>();
-        if (stages != null) {
-            for (T stage : stages) {
-                result.put(stage.getId(), stage);
-            }
-        }
-        return unmodifiableMap(result);
+        this((Class<? extends T>) Stage.class, loadClassBy(classLoader, configuration.getFromType()), null, configuration.getFromField(), configuration.getAccessTypes());
     }
 
 }

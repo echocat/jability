@@ -17,43 +17,90 @@ package org.echocat.jability.support;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.xml.bind.annotation.XmlType;
-import java.io.*;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.net.URL;
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
+import java.util.regex.Pattern;
 
 import static java.lang.Thread.currentThread;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Collections.unmodifiableCollection;
 import static org.echocat.jability.support.AccessType.matches;
+import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 public class DiscoverUtils {
 
     private DiscoverUtils() {}
 
     @Nonnull
-    public static <T> Collection<T> discoverStaticFieldValuesBy(@Nonnull Class<? extends T> fieldType, @Nullable AccessType... accessTypes) {
-        return discoverStaticFieldValuesBy(fieldType, fieldType, accessTypes);
+    public static ClassLoader selectClassLoader(@Nullable ClassLoader classLoader) {
+        return classLoader != null ? classLoader : currentThread().getContextClassLoader();
     }
 
     @Nonnull
-    public static <T> Collection<T> discoverStaticFieldValuesBy(@Nonnull Class<? extends T> fieldType, @Nonnull Class<?> startFrom, @Nullable AccessType... accessTypes) {
-        return discoverStaticFieldValuesBy(fieldType, startFrom, null, accessTypes);
+    public static Class<?> loadClassBy(@Nullable ClassLoader classLoader, @Nonnull String className) throws IllegalArgumentException {
+        try {
+            return selectClassLoader(classLoader).loadClass(className);
+        } catch (ClassNotFoundException e) {
+            throw new IllegalArgumentException("Could not find a class named: " + className, e);
+        }
     }
 
     @Nonnull
-    public static <T> Collection<T> discoverStaticFieldValuesBy(@Nonnull Class<? extends T> fieldType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable AccessType... accessTypes) {
+    public static <T> Class<? extends T> loadClassBy(@Nullable ClassLoader classLoader, @Nonnull String className, @Nonnull Class<T> expectedType) throws IllegalArgumentException {
+        final Class<?> plainClass = loadClassBy(classLoader, className);
+        if (!expectedType.isAssignableFrom(plainClass)) {
+            throw new IllegalArgumentException("Class " + className + " is not of type " + expectedType.getName() + ".");
+        }
+        // noinspection unchecked
+        return (Class<? extends T>) plainClass;
+    }
+
+    @Nonnull
+    public static <T> T createInstanceBy(@Nullable ClassLoader classLoader, @Nonnull String className, @Nonnull Class<T> expectedType) throws IllegalArgumentException {
+        final Class<? extends T> loadedClass = loadClassBy(classLoader, className, expectedType);
+        final Constructor<? extends T> constructor;
+        try {
+            constructor = loadedClass.getConstructor();
+        } catch (NoSuchMethodException e) {
+            throw new IllegalArgumentException("Could not find a default constructor of class: " + className, e);
+        }
+        try {
+            return constructor.newInstance();
+        } catch (Exception e) {
+            final Throwable cause = e instanceof InvocationTargetException ? ((InvocationTargetException) e).getTargetException() : null;
+            final Throwable target = cause != null ? cause : e;
+            if (target instanceof RuntimeException) {
+                throw (RuntimeException) target;
+            } else if (target instanceof Error) {
+                throw (Error) target;
+            } else {
+                throw new RuntimeException("Could not init " + className + ".", target);
+            }
+        }
+    }
+
+    @Nonnull
+    public static <T> Collection<T> discoverStaticFieldValuesBy(@Nonnull Class<? extends T> fieldType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldName, @Nullable AccessType... accessTypes) {
+        return discoverStaticFieldValuesBy(fieldType, startFrom, stopAt, fieldName, asList(accessTypes));
+    }
+
+    @Nonnull
+    public static <T> Collection<T> discoverStaticFieldValuesBy(@Nonnull Class<? extends T> fieldType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldName, @Nullable Collection<AccessType> accessTypes) {
         final Collection<T> result = new ArrayList<>();
         if (!startFrom.equals(stopAt)) {
             for (Field field : startFrom.getDeclaredFields()) {
-                if (isStatic(field.getModifiers())) {
-                    if (matches(field, accessTypes)) {
-                        if (fieldType.isAssignableFrom(field.getType())) {
-                            field.setAccessible(true);
-                            try {
-                                result.add(fieldType.cast(field.get(null)));
-                            } catch (Exception e) {
-                                throw new RuntimeException("Could not get the value from " + field + ".", e);
+                if (fieldName == null || fieldName.matcher(field.getName()).matches()) {
+                    if (isStatic(field.getModifiers())) {
+                        if (matches(field, accessTypes)) {
+                            if (fieldType.isAssignableFrom(field.getType())) {
+                                field.setAccessible(true);
+                                try {
+                                    result.add(fieldType.cast(field.get(null)));
+                                } catch (Exception e) {
+                                    throw new RuntimeException("Could not get the value from " + field + ".", e);
+                                }
                             }
                         }
                     }
@@ -61,7 +108,7 @@ public class DiscoverUtils {
             }
             final Class<?> superclass = startFrom.getSuperclass();
             if (superclass != null && !superclass.equals(Object.class)) {
-                result.addAll(discoverStaticFieldValuesBy(fieldType, superclass, stopAt, accessTypes));
+                result.addAll(discoverStaticFieldValuesBy(fieldType, superclass, stopAt, fieldName, accessTypes));
             }
         }
         return unmodifiableCollection(result);
@@ -75,8 +122,7 @@ public class DiscoverUtils {
     @Nonnull
     public static <T> Iterable<Class<? extends T>> discoverTypesOf(@Nonnull final Class<?> baseType, @Nullable final Class<T> expectedType, @Nullable final ClassLoader classLoader) {
         return new Iterable<Class<? extends T>>() { @Override public Iterator<Class<? extends T>> iterator() {
-            final ClassLoader targetClassLoader = classLoader != null ? classLoader : currentThread().getContextClassLoader();
-            return new TypeIterator<>(baseType, expectedType, targetClassLoader);
+            return new TypeIterator<>(baseType, expectedType, selectClassLoader(classLoader));
         }};
     }
 
@@ -91,97 +137,4 @@ public class DiscoverUtils {
         return xmlType != null && !"##default".equals(xmlType.name()) ? xmlType.name() : type.getSimpleName();
     }
 
-    private static class TypeIterator<T> implements Iterator<Class<? extends T>> {
-
-        private final Class<?> _baseType;
-        private final ClassLoader _classLoader;
-        private final Class<T> _expectedType;
-
-        private final Enumeration<URL> _urls;
-
-        private Iterator<Class<? extends T>> _currentIterator;
-        private Boolean _hasNext;
-        private Class<? extends T> _next;
-
-        private TypeIterator(@Nonnull Class<?> baseType, @Nullable Class<T> expectedType, @Nonnull ClassLoader classLoader) {
-            _baseType = baseType;
-            _classLoader = classLoader;
-            _expectedType = expectedType;
-
-            final String fileName = "META-INF/types/" + baseType.getName();
-            try {
-                _urls = classLoader.getResources(fileName);
-            } catch (IOException e) {
-                throw new RuntimeException("Could not load files '" + fileName + "' from classpath by " + classLoader + ".", e);
-            }
-        }
-
-        @Nonnull
-        private Iterator<Class<? extends T>> load(@Nonnull URL url) {
-            try {
-                try (final InputStream is = url.openStream()) {
-                    try (final Reader reader = new InputStreamReader(is)) {
-                        try (final BufferedReader br = new BufferedReader(reader)) {
-                            final Collection<Class<? extends T>> types = new ArrayList<>();
-                            String line = br.readLine();
-                            while (line != null) {
-                                final String trimmedLine = line.trim();
-                                if (!trimmedLine.isEmpty()) {
-                                    final Class<?> plainClass;
-                                    try {
-                                        plainClass = _classLoader.loadClass(trimmedLine);
-                                    } catch (ClassNotFoundException e) {
-                                        throw new RuntimeException("Could not find a class named " + trimmedLine + " defined in " + url + ".", e);
-                                    }
-                                    if (_expectedType != null && !_expectedType.isAssignableFrom(plainClass)) {
-                                        throw new RuntimeException("Class named " + trimmedLine + " defined in " + url + " is not of expected type " + _expectedType.getName() + ".");
-                                    }
-                                    // noinspection unchecked
-                                    types.add((Class<? extends T>) plainClass);
-                                }
-                                line = br.readLine();
-                            }
-                            return types.iterator();
-                        }
-                    }
-                }
-            } catch (IOException e) {
-                throw new RuntimeException("Could not load classes of type " + _baseType.getName() + " from " + url + ".", e);
-            }
-        }
-
-        @Override
-        public boolean hasNext() {
-            while (_hasNext == null) {
-                if (_currentIterator != null && _currentIterator.hasNext()) {
-                    _hasNext = true;
-                    _next = _currentIterator.next();
-                } else {
-                    if (_urls.hasMoreElements()) {
-                        _currentIterator = load(_urls.nextElement());
-                        _hasNext = null;
-                    } else {
-                        _hasNext = false;
-                    }
-                }
-            }
-            return _hasNext;
-        }
-
-        @Override
-        public Class<? extends T> next() {
-            if (!hasNext()) {
-                throw new NoSuchElementException();
-            }
-            final Class<? extends T> next = _next;
-            _next = null;
-            _hasNext = null;
-            return next;
-        }
-
-        @Override
-        public void remove() {
-            throw new UnsupportedOperationException();
-        }
-    }
 }

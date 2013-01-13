@@ -14,12 +14,19 @@
 
 package org.echocat.jability;
 
+import org.echocat.jability.value.ValueProvider;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-public interface CapabilityProvider extends Iterable<Capability<?>> {
+public interface CapabilityProvider extends ValueProvider<Capability<?>> {
 
+    /**
+     * @return the found definition if one exists for given <code>id</code>. It not <code>null</code> is returned.
+     * @throws IllegalArgumentException if the provided <code>valueType</code> does not match the type of the found definition.
+     */
+    @Override
     @Nullable
-    public <V> Capability<V> provideBy(@Nonnull CapabilityDefinition<V> definition);
+    public <V> Capability<V> provideBy(@Nonnull Class<V> valueType, @Nonnull String id) throws IllegalArgumentException;
 
 }

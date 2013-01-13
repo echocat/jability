@@ -14,9 +14,8 @@
 
 package org.echocat.jability.jmx;
 
+import org.echocat.jability.Capabilities;
 import org.echocat.jability.Capability;
-import org.echocat.jability.CapabilityDefinition;
-import org.echocat.jability.CapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.management.*;
@@ -25,28 +24,27 @@ import java.util.List;
 
 public class CapabilityDynamicMBean implements DynamicMBean {
 
-    private final CapabilityDefinition<?> _definition;
-    private final CapabilityProvider _capabilityProvider;
+    private final Capability<Object> _capability;
+    private final Capabilities _capabilities;
 
-    public CapabilityDynamicMBean(@Nonnull CapabilityDefinition<?> definition, @Nonnull CapabilityProvider capabilityProvider) {
-        _definition = definition;
-        _capabilityProvider = capabilityProvider;
+    public CapabilityDynamicMBean(@Nonnull Capability<?> capability, @Nonnull Capabilities capabilities) {
+        // noinspection unchecked
+        _capability = (Capability<Object>) capability;
+        _capabilities = capabilities;
     }
 
     @Override
     public Object getAttribute(String attribute) throws AttributeNotFoundException, MBeanException, ReflectionException {
         final Object result;
         if ("id".equals(attribute)) {
-            result = _definition.getId();
+            result = _capability.getId();
         } else if ("valueType".equals(attribute)) {
-            result = _definition.getValueType().getName();
-        } else if ("defaultValue".equals(attribute)) {
-            result = _definition.getDefaultValue();
-        } else if ("nullable".equals(attribute)) {
-            result = _definition.isNullable();
+            result = _capability.getValueType().getName();
+        } else if ("isDefaultValue".equals(attribute)) {
+            final Object value = _capabilities.get(_capability);
+            result = value != null ? value.equals(_capability.getDefaultValue()) : _capability.getDefaultValue() == null;
         } else if ("value".equals(attribute)) {
-            final Capability<?> capability = _capabilityProvider.provideBy(_definition);
-            result = capability != null ? capability.get() : null;
+            result = _capabilities.get(_capability, null);
         } else {
             throw new AttributeNotFoundException(attribute);
         }
@@ -59,17 +57,12 @@ public class CapabilityDynamicMBean implements DynamicMBean {
         final Object value = attribute.getValue();
         if ("value".equals(attributeName)) {
             // noinspection unchecked
-            final Capability<Object> capability = (Capability<Object>) _capabilityProvider.provideBy(_definition);
-            if (capability != null && capability.isModifiable()) {
-                final Class<?> valueType = _definition.getValueType();
+            if (_capabilities.isModifiable(_capability)) {
+                final Class<?> valueType = _capability.getValueType();
                 if (valueType.isInstance(value)) {
-                    capability.set(value);
+                    _capabilities.set(_capability, value);
                 } else if (value == null) {
-                    if (_definition.isNullable()) {
-                        capability.set(null);
-                    } else {
-                        throw new InvalidAttributeValueException("Value could not be null");
-                    }
+                    _capabilities.remove(null);
                 } else {
                     throw new InvalidAttributeValueException("Type " + valueType.getName() + " is expected but got value: " + value);
                 }
@@ -94,13 +87,11 @@ public class CapabilityDynamicMBean implements DynamicMBean {
     @Nonnull
     protected MBeanAttributeInfo[] getAttributes() {
         // noinspection unchecked
-        final Capability<Object> capability = (Capability<Object>) _capabilityProvider.provideBy(_definition);
         final List<MBeanAttributeInfo> result = new ArrayList<>();
         result.add(new MBeanAttributeInfo("id", String.class.getName(), null, true, false, false));
         result.add(new MBeanAttributeInfo("valueType", String.class.getName(), null, true, false, false));
-        result.add(new MBeanAttributeInfo("defaultValue", _definition.getValueType().getName(), null, true, false, false));
-        result.add(new MBeanAttributeInfo("nullable", Boolean.class.getName(), null, true, false, false));
-        result.add(new MBeanAttributeInfo("value", _definition.getValueType().getName(), null, true, capability != null && capability.isModifiable(), false));
+        result.add(new MBeanAttributeInfo("isDefaultValue", Boolean.class.getName(), null, true, false, false));
+        result.add(new MBeanAttributeInfo("value", _capability.getValueType().getName(), null, true, _capabilities.isModifiable(_capability), false));
         return result.toArray(new MBeanAttributeInfo[result.size()]);
     }
 

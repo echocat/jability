@@ -16,7 +16,7 @@ package org.echocat.jability.stage;
 
 import org.junit.Test;
 
-import static org.echocat.jability.stage.CompoundStageProvider.stageProvider;
+import static org.echocat.jability.direct.DirectJability.stageProvider;
 import static org.echocat.jability.stage.Stages.*;
 import static org.echocat.jomon.testing.Assert.assertThat;
 import static org.echocat.jomon.testing.BaseMatchers.is;

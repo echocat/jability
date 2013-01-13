@@ -22,7 +22,7 @@ public abstract class IdBasedConfiguration extends BaseConfiguration {
 
     private String _id;
 
-    @XmlAttribute(name = "id")
+    @XmlAttribute(name = "id", required = true)
     public String getId() {
         return _id;
     }

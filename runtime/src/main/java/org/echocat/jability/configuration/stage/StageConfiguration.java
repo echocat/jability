@@ -20,11 +20,11 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "stage")
-public class StageConfiguration extends IdBasedConfiguration {
+public class StageConfiguration extends IdBasedConfiguration implements UnderStagesRootConfiguration {
 
     private int _priority;
 
-    @XmlAttribute(name = "priority")
+    @XmlAttribute(name = "priority", required = true)
     public int getPriority() {
         return _priority;
     }

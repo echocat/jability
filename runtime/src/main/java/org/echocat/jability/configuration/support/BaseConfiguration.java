@@ -14,6 +14,11 @@
 
 package org.echocat.jability.configuration.support;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
@@ -21,6 +26,13 @@ import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
 import static org.echocat.jability.support.DiscoverUtils.nameOf;
 
 public abstract class BaseConfiguration {
+
+    @Nonnull
+    protected <T> List<T> addOrCreate(@Nonnull T what, @Nullable List<T> to) {
+        final List<T> target = to != null ? to : new ArrayList<T>();
+        target.add(what);
+        return target;
+    }
 
     @Override
     public boolean equals(Object o) {

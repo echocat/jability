@@ -17,8 +17,10 @@ package org.echocat.jability.support;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Field;
+import java.util.Collection;
 
 import static java.lang.reflect.Modifier.*;
+import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
 public enum AccessType {
     PUBLIC { @Override public boolean matches(int modifiers) {
@@ -34,7 +36,7 @@ public enum AccessType {
         return isPrivate(modifiers);
     }};
 
-    public static final AccessType[] DEFAULT_ACCESS_TYPES = new AccessType[]{AccessType.PUBLIC};
+    public static final Collection<AccessType> DEFAULT_ACCESS_TYPES = asImmutableList(AccessType.PUBLIC);
 
     public abstract boolean matches(int modifiers);
 
@@ -42,8 +44,8 @@ public enum AccessType {
         return matches(field.getModifiers());
     }
 
-    public static boolean matches(@Nonnull Field field, @Nullable AccessType... accessTypes) {
-        final AccessType[] targetAccessTypes = accessTypes != null && accessTypes.length > 0 ? accessTypes : DEFAULT_ACCESS_TYPES;
+    public static boolean matches(@Nonnull Field field, @Nullable Collection<AccessType> accessTypes) {
+        final Collection<AccessType> targetAccessTypes = accessTypes != null && !accessTypes.isEmpty() ? accessTypes : DEFAULT_ACCESS_TYPES;
         boolean result = false;
         for (AccessType accessType : targetAccessTypes) {
             if (accessType.matches(field)) {

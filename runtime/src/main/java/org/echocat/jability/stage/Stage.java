@@ -14,6 +14,8 @@
 
 package org.echocat.jability.stage;
 
+import org.echocat.jability.configuration.stage.StageConfiguration;
+
 import javax.annotation.Nonnull;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
@@ -35,6 +37,11 @@ public interface Stage {
         public Impl(@Nonnull String id, int priority) {
             _id = id;
             _priority = priority;
+        }
+
+        public Impl(@Nonnull StageConfiguration configuration) {
+            _id = configuration.getId();
+            _priority = configuration.getPriority();
         }
 
         @Override

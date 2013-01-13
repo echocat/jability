@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  ~ **** BEGIN LICENSE BLOCK *****
+  ~
+  ~ Version: MPL 2.0
+  ~
+  ~ echocat Jability, Copyright (c) 2013 echocat
+  ~
+  ~ This Source Code Form is subject to the terms of the Mozilla Public
+  ~ License, v. 2.0. If a copy of the MPL was not distributed with this
+  ~ file, You can obtain one at http://mozilla.org/MPL/2.0/.
+  ~
+  ~ **** END LICENSE BLOCK *****
+  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+
+<xsd:schema version="1.0"
+            targetNamespace="https://jemoni.echocat.org/schemas/jmx2carbonRules.xsd"
+            xmlns="https://jemoni.echocat.org/schemas/jmx2carbonRules.xsd"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            elementFormDefault="qualified" attributeFormDefault="unqualified">
+
+    <xsd:element name="configuration" type="configuration" />
+
+    <xsd:complexType name="configuration">
+        <xsd:sequence>
+            <xsd:element name="capabilities" type="capabilitiesRoot" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="stages" type="stagesRoot" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="properties" type="propertiesRoot" minOccurs="0" maxOccurs="1" />
+            <xsd:element name="jmx" type="jmxRoot" minOccurs="0" maxOccurs="1" />
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <!-- *************************************************************************************************************************************************** -->
+
+    <xsd:complexType name="capabilitiesRoot">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="capabilities" type="capabilities" />
+            <xsd:element name="reference" type="capabilityReference" />
+            <xsd:element name="provider" type="capabilityProvider" />
+        </xsd:choice>
+        <xsd:attribute name="respectSystemCapabilities" type="xsd:boolean" use="optional" default="true" />
+        <xsd:attribute name="respectSystemProviders" type="xsd:boolean" use="optional" default="true" />
+    </xsd:complexType>
+
+    <xsd:complexType name="capabilities" xml:base="typeBased" />
+    <xsd:complexType name="capabilityReference" xml:base="referenceBased" />
+    <xsd:complexType name="capabilityProvider" xml:base="typeBased" />
+
+    <!-- *************************************************************************************************************************************************** -->
+
+    <xsd:complexType name="stagesRoot">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="stage" type="stage" />
+            <xsd:element name="reference" type="stageReference" />
+            <xsd:element name="available" type="availableStage" />
+            <xsd:element name="provider" type="stageProvider" />
+        </xsd:choice>
+        <xsd:attribute name="current" type="id" use="optional" />
+        <xsd:attribute name="respectSystemProviders" type="xsd:boolean" use="optional" default="true" />
+    </xsd:complexType>
+
+    <xsd:complexType name="stage">
+        <xsd:complexContent>
+            <xsd:extension base="idBased">
+                <xsd:attribute name="priority" type="xsd:integer" use="required" />
+            </xsd:extension>
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="stageReference" xml:base="referenceBased" />
+    <xsd:complexType name="availableStage" xml:base="idBased" />
+    <xsd:complexType name="stageProvider" xml:base="typeBased" />
+
+    <!-- *************************************************************************************************************************************************** -->
+
+    <xsd:complexType name="propertiesRoot">
+        <xsd:choice minOccurs="0" maxOccurs="unbounded">
+            <xsd:element name="properties" type="properties" />
+            <xsd:element name="reference" type="propertyReference" />
+            <xsd:element name="provider" type="propertyProvider" />
+        </xsd:choice>
+        <xsd:attribute name="respectSystemProperties" type="xsd:boolean" use="optional" default="true" />
+        <xsd:attribute name="respectSystemProviders" type="xsd:boolean" use="optional" default="true" />
+    </xsd:complexType>
+
+    <xsd:complexType name="properties" xml:base="typeBased" />
+    <xsd:complexType name="propertyReference" xml:base="referenceBased" />
+    <xsd:complexType name="propertyProvider" xml:base="typeBased" />
+
+    <!-- *************************************************************************************************************************************************** -->
+
+    <xsd:complexType name="jmxRoot">
+        <xsd:attribute name="propagate" type="xsd:boolean" use="optional" />
+    </xsd:complexType>
+
+    <!-- *************************************************************************************************************************************************** -->
+
+    <xsd:complexType name="idBased">
+        <xsd:attribute name="id" type="id" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="typeBased">
+        <xsd:attribute name="type" type="xsd:string" use="required" />
+    </xsd:complexType>
+
+    <xsd:complexType name="referenceBased">
+        <xsd:attribute name="fromType" type="xsd:string" use="required" />
+        <xsd:attribute name="fromField" type="xsd:string" use="optional" />
+        <xsd:attribute name="accessTypes" type="accessTypes" use="optional" />
+    </xsd:complexType>
+
+
+    <xsd:simpleType name="accessTypes">
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern value="\s*(|PUBLIC|PROTECTED|PACKAGE_LOCAL|PRIVATE)\s*([,;\n ]\s*(|PUBLIC|PROTECTED|PACKAGE_LOCAL|PRIVATE)\s*)*" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name="id">
+        <xsd:restriction base="xsd:token">
+            <xsd:pattern value="[a-zA-Z0-9.$_]+" />
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
+

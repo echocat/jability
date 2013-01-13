@@ -19,4 +19,4 @@ import org.echocat.jability.configuration.support.IdBasedConfiguration;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "availableStage")
-public class AvailableStageConfiguration extends IdBasedConfiguration {}
+public class AvailableStageConfiguration extends IdBasedConfiguration implements UnderStagesRootConfiguration {}

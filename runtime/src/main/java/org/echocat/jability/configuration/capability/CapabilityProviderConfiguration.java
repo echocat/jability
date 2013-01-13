@@ -19,4 +19,4 @@ import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 import javax.xml.bind.annotation.XmlType;
 
 @XmlType(name = "capabilityProvider")
-public class CapabilityProviderConfiguration extends TypeBasedConfiguration {}
+public class CapabilityProviderConfiguration extends TypeBasedConfiguration implements UnderCapabilitiesRootConfiguration {}

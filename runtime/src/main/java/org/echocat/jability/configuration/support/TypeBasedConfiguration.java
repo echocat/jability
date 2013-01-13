@@ -20,14 +20,14 @@ import static org.echocat.jability.support.DiscoverUtils.nameOf;
 
 public abstract class TypeBasedConfiguration extends BaseConfiguration {
 
-    private Class<?> _type;
+    private String _type;
 
-    @XmlAttribute(name = "type")
-    public Class<?> getType() {
+    @XmlAttribute(name = "type", required = true)
+    public String getType() {
         return _type;
     }
 
-    public void setType(Class<?> type) {
+    public void setType(String type) {
         _type = type;
     }
 

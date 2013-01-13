@@ -14,23 +14,43 @@
 
 package org.echocat.jability;
 
-import org.echocat.jability.property.PropertyCollection;
+import org.echocat.jability.value.Value;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
-public interface Capability<V> {
+import static org.echocat.jability.value.support.DefinitionIdUtils.buildCapabilityDefinitionIdFrom;
 
-    @Nonnull
-    public CapabilityDefinition<V> getDefinition();
+public interface Capability<V> extends Value<V> {
 
-    @Nullable
-    public V get();
+    @ThreadSafe
+    @Immutable
+    public static class Impl<V> extends Value.Impl<V> implements Capability<V> {
 
-    public void set(@Nullable V value) throws UnsupportedOperationException;
+        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull String id, @Nullable V defaultValue) {
+            super(valueType, id, defaultValue);
+        }
 
-    public boolean isModifiable();
+        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId, @Nullable V defaultValue) {
+            this(valueType, buildCapabilityDefinitionIdFrom(basedOn, subId), defaultValue);
+        }
 
-    @Nonnull
-    public PropertyCollection getProperties();
+        @Override
+        public boolean equals(Object o) {
+            final boolean result;
+            if (this == o) {
+                result = true;
+            } else if (!(o instanceof Capability)) {
+                result = false;
+            } else {
+                final Capability<?> that = (Capability) o;
+                result = getId().equals(that.getId());
+            }
+            return result;
+        }
+
+    }
+
 }
