@@ -18,5 +18,7 @@ import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "stageProvider")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "stageProvider", namespace = SCHEMA_NAMESPACE)
 public class StageProviderConfiguration extends TypeBasedConfiguration implements UnderStagesRootConfiguration {}

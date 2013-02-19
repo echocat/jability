@@ -18,5 +18,7 @@ import org.echocat.jability.configuration.support.IdBasedConfiguration;
 
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "availableStage")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "availableStage", namespace = SCHEMA_NAMESPACE)
 public class AvailableStageConfiguration extends IdBasedConfiguration implements UnderStagesRootConfiguration {}

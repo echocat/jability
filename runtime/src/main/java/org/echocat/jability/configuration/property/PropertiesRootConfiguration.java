@@ -26,9 +26,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
-@XmlType(name = "propertiesRoot", propOrder = {"respectSystemProviders", "properties", "references", "providers"})
+@XmlType(name = "propertiesRoot", propOrder = {"respectSystemProperties", "respectSystemProviders", "properties", "references", "providers"}, namespace = SCHEMA_NAMESPACE)
 public class PropertiesRootConfiguration extends BaseConfiguration implements UnderConfiguration {
 
     @Nonnull
@@ -51,7 +52,7 @@ public class PropertiesRootConfiguration extends BaseConfiguration implements Un
         _respectSystemProperties = respectSystemProperties;
     }
 
-    @XmlAttribute(name = "respectSystemDefinitionProviders")
+    @XmlAttribute(name = "respectSystemProviders")
     public boolean isRespectSystemProviders() {
         return _respectSystemProviders;
     }
@@ -60,7 +61,7 @@ public class PropertiesRootConfiguration extends BaseConfiguration implements Un
         _respectSystemProviders = respectSystemProviders;
     }
 
-    @XmlElement(name = "properties")
+    @XmlElement(name = "properties", namespace = SCHEMA_NAMESPACE)
     public List<PropertiesConfiguration> getProperties() {
         return _properties;
     }
@@ -69,7 +70,7 @@ public class PropertiesRootConfiguration extends BaseConfiguration implements Un
         _properties = properties;
     }
 
-    @XmlElement(name = "property")
+    @XmlElement(name = "reference", namespace = SCHEMA_NAMESPACE)
     public List<PropertyReferenceConfiguration> getReferences() {
         return _references;
     }
@@ -78,7 +79,7 @@ public class PropertiesRootConfiguration extends BaseConfiguration implements Un
         _references = references;
     }
 
-    @XmlElement(name = "provider")
+    @XmlElement(name = "provider", namespace = SCHEMA_NAMESPACE)
     public List<PropertyProviderConfiguration> getProviders() {
         return _providers;
     }

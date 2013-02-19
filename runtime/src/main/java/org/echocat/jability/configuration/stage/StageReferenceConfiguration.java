@@ -18,5 +18,7 @@ import org.echocat.jability.configuration.support.BaseReferenceConfiguration;
 
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "stageReference")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "stageReference", namespace = SCHEMA_NAMESPACE)
 public class StageReferenceConfiguration extends BaseReferenceConfiguration implements UnderStagesRootConfiguration {}

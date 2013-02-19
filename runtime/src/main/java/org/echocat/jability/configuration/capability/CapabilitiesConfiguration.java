@@ -18,5 +18,7 @@ import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "capabilities")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "capabilities", namespace = SCHEMA_NAMESPACE)
 public class CapabilitiesConfiguration extends TypeBasedConfiguration implements UnderCapabilitiesRootConfiguration {}

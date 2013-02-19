@@ -26,9 +26,10 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 import java.util.List;
 
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
-@XmlType(name = "capabilitiesRoot", propOrder = {"respectSystemCapabilities", "respectSystemProviders", "capabilities", "references", "providers"})
+@XmlType(name = "capabilitiesRoot", propOrder = {"respectSystemCapabilities", "respectSystemProviders", "capabilities", "references", "providers"}, namespace = SCHEMA_NAMESPACE)
 public class CapabilitiesRootConfiguration extends BaseConfiguration implements UnderConfiguration {
 
     private boolean _respectSystemCapabilities = true;
@@ -55,7 +56,7 @@ public class CapabilitiesRootConfiguration extends BaseConfiguration implements 
         _respectSystemProviders = respectSystemProviders;
     }
 
-    @XmlElement(name = "capabilities")
+    @XmlElement(name = "capabilities", namespace = SCHEMA_NAMESPACE)
     public List<CapabilitiesConfiguration> getCapabilities() {
         return _capabilities;
     }
@@ -64,7 +65,7 @@ public class CapabilitiesRootConfiguration extends BaseConfiguration implements 
         _capabilities = capabilities;
     }
 
-    @XmlElement(name = "reference")
+    @XmlElement(name = "reference", namespace = SCHEMA_NAMESPACE)
     public List<CapabilityReferenceConfiguration> getReferences() {
         return _references;
     }
@@ -73,7 +74,7 @@ public class CapabilitiesRootConfiguration extends BaseConfiguration implements 
         _references = references;
     }
 
-    @XmlElement(name = "provider")
+    @XmlElement(name = "provider", namespace = SCHEMA_NAMESPACE)
     public List<CapabilityProviderConfiguration> getProviders() {
         return _providers;
     }

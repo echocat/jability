@@ -14,21 +14,40 @@
 
 package org.echocat.jability.configuration;
 
+import org.apache.commons.io.IOUtils;
 import org.echocat.jability.configuration.impl.*;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
+import java.io.InputStream;
 
 import static org.echocat.jability.configuration.ConfigurationMarshaller.marshal;
+import static org.echocat.jability.configuration.ConfigurationMarshaller.unmarshal;
 import static org.echocat.jability.configuration.Configurations.*;
-import static org.junit.Assert.fail;
+import static org.echocat.jomon.testing.BaseMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ConfigurationUnitTest {
 
     @Test
-    public void test() throws Exception {
+    public void testMarshall() throws Exception {
         final Configuration configuration = configurationReference();
-        fail(marshal(configuration));
+        assertThat(marshal(configuration), is(exampleConfigurationContent()));
+    }
+
+    @Test
+    public void testUnmarshall() throws Exception {
+        final Configuration configuration = configurationReference();
+        final String marshalled = marshal(configuration);
+        final Configuration unmarshalled = unmarshal(marshalled);
+        assertThat(unmarshalled.toString(), is(configuration.toString()));
+    }
+
+    @Nonnull
+    protected static String exampleConfigurationContent() throws Exception {
+        try (final InputStream is = ConfigurationUnitTest.class.getResourceAsStream("example.txt")) {
+            return IOUtils.toString(is).replace("\r", "");
+        }
     }
 
     @Nonnull
@@ -38,7 +57,7 @@ public class ConfigurationUnitTest {
                 respectSystemCapabilities(true),
                 respectSystemCapabilityProviders(true),
                 capabilities(TestCapabilitiesA.class),
-                capabilities(TestCapabilitiesA.class),
+                capabilities(TestCapabilitiesB.class),
                 capabilityProvider(TestCapabilityProviderA.class),
                 capabilityProvider(TestCapabilityProviderB.class),
                 capabilityReference(TestCapabilityReferenceA.class, "test.*"),

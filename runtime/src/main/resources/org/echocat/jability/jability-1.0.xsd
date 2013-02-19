@@ -14,8 +14,8 @@
   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
 <xsd:schema version="1.0"
-            targetNamespace="https://jemoni.echocat.org/schemas/jmx2carbonRules.xsd"
-            xmlns="https://jemoni.echocat.org/schemas/jmx2carbonRules.xsd"
+            targetNamespace="https://jability.echocat.org/schemas/jability.xsd"
+            xmlns="https://jability.echocat.org/schemas/jability.xsd"
             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
             elementFormDefault="qualified" attributeFormDefault="unqualified">
 
@@ -42,9 +42,21 @@
         <xsd:attribute name="respectSystemProviders" type="xsd:boolean" use="optional" default="true" />
     </xsd:complexType>
 
-    <xsd:complexType name="capabilities" xml:base="typeBased" />
-    <xsd:complexType name="capabilityReference" xml:base="referenceBased" />
-    <xsd:complexType name="capabilityProvider" xml:base="typeBased" />
+    <xsd:complexType name="capabilities">
+        <xsd:complexContent>
+            <xsd:extension base="typeBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="capabilityReference">
+        <xsd:complexContent>
+            <xsd:extension base="referenceBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="capabilityProvider">
+        <xsd:complexContent>
+            <xsd:extension base="typeBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
 
     <!-- *************************************************************************************************************************************************** -->
 
@@ -66,9 +78,21 @@
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
-    <xsd:complexType name="stageReference" xml:base="referenceBased" />
-    <xsd:complexType name="availableStage" xml:base="idBased" />
-    <xsd:complexType name="stageProvider" xml:base="typeBased" />
+    <xsd:complexType name="stageReference">
+        <xsd:complexContent>
+            <xsd:extension base="referenceBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="availableStage">
+        <xsd:complexContent>
+            <xsd:extension base="idBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="stageProvider">
+        <xsd:complexContent>
+            <xsd:extension base="typeBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
 
     <!-- *************************************************************************************************************************************************** -->
 
@@ -82,9 +106,21 @@
         <xsd:attribute name="respectSystemProviders" type="xsd:boolean" use="optional" default="true" />
     </xsd:complexType>
 
-    <xsd:complexType name="properties" xml:base="typeBased" />
-    <xsd:complexType name="propertyReference" xml:base="referenceBased" />
-    <xsd:complexType name="propertyProvider" xml:base="typeBased" />
+    <xsd:complexType name="properties">
+        <xsd:complexContent>
+            <xsd:extension base="typeBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="propertyReference">
+        <xsd:complexContent>
+            <xsd:extension base="referenceBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
+    <xsd:complexType name="propertyProvider">
+        <xsd:complexContent>
+            <xsd:extension base="typeBased" />
+        </xsd:complexContent>
+    </xsd:complexType>
 
     <!-- *************************************************************************************************************************************************** -->
 

@@ -26,9 +26,10 @@ import javax.xml.bind.annotation.XmlType;
 import static java.lang.Boolean.TRUE;
 import static java.lang.System.getProperty;
 import static org.echocat.jability.Jability.AUTO_PROPAGATE_NAME;
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
-@XmlType(name = "jmxRoot")
+@XmlType(name = "jmxRoot", namespace = SCHEMA_NAMESPACE)
 public class JmxRootConfiguration extends BaseConfiguration implements UnderConfiguration {
 
     @Nullable

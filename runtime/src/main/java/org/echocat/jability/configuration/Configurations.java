@@ -119,7 +119,7 @@ public class Configurations {
         final CapabilityReferenceConfiguration configuration = new CapabilityReferenceConfiguration();
         configuration.setFromType(fromType);
         configuration.setFromField(fromField);
-        configuration.setAccessTypes(accessTypes != null ? asList(accessTypes) : null);
+        configuration.setAccessTypes(accessTypes != null && accessTypes.length > 0 ? asList(accessTypes) : null);
         return configuration;
     }
 
@@ -229,7 +229,7 @@ public class Configurations {
         final PropertyReferenceConfiguration configuration = new PropertyReferenceConfiguration();
         configuration.setFromType(fromType);
         configuration.setFromField(fromField);
-        configuration.setAccessTypes(accessTypes != null ? asList(accessTypes) : null);
+        configuration.setAccessTypes(accessTypes != null && accessTypes.length > 0 ? asList(accessTypes) : null);
         return configuration;
     }
 
@@ -286,7 +286,7 @@ public class Configurations {
         final StageReferenceConfiguration configuration = new StageReferenceConfiguration();
         configuration.setFromType(fromType);
         configuration.setFromField(fromField);
-        configuration.setAccessTypes(accessTypes != null ? asList(accessTypes) : null);
+        configuration.setAccessTypes(accessTypes != null && accessTypes.length > 0 ? asList(accessTypes) : null);
         return configuration;
     }
 

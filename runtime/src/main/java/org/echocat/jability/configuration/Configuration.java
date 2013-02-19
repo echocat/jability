@@ -18,6 +18,7 @@ import org.echocat.jability.configuration.capability.CapabilitiesRootConfigurati
 import org.echocat.jability.configuration.jmx.JmxRootConfiguration;
 import org.echocat.jability.configuration.property.PropertiesRootConfiguration;
 import org.echocat.jability.configuration.stage.StagesRootConfiguration;
+import org.echocat.jability.configuration.support.BaseConfiguration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -25,18 +26,21 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
+import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
+import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 @XmlRootElement(name = "configuration")
-@XmlType(name = "configuration", propOrder = {"capabilities", "stages", "properties", "jmx"})
-public class Configuration {
+@XmlType(name = "configuration", propOrder = {"capabilities", "stages", "properties", "jmx"}, namespace = SCHEMA_NAMESPACE)
+public class Configuration extends BaseConfiguration {
 
     private CapabilitiesRootConfiguration _capabilities;
     private StagesRootConfiguration _stages;
     private PropertiesRootConfiguration _properties;
     private JmxRootConfiguration _jmx;
 
-    @XmlElement(name = "capabilities")
+    @XmlElement(name = "capabilities", namespace = SCHEMA_NAMESPACE)
     public CapabilitiesRootConfiguration getCapabilities() {
         return _capabilities;
     }
@@ -45,7 +49,7 @@ public class Configuration {
         _capabilities = capabilities;
     }
 
-    @XmlElement(name = "stages")
+    @XmlElement(name = "stages", namespace = SCHEMA_NAMESPACE)
     public StagesRootConfiguration getStages() {
         return _stages;
     }
@@ -54,7 +58,7 @@ public class Configuration {
         _stages = stages;
     }
 
-    @XmlElement(name = "properties")
+    @XmlElement(name = "properties", namespace = SCHEMA_NAMESPACE)
     public PropertiesRootConfiguration getProperties() {
         return _properties;
     }
@@ -63,7 +67,7 @@ public class Configuration {
         _properties = properties;
     }
 
-    @XmlElement(name = "jmx")
+    @XmlElement(name = "jmx", namespace = SCHEMA_NAMESPACE)
     public JmxRootConfiguration getJmx() {
         return _jmx;
     }
@@ -97,4 +101,21 @@ public class Configuration {
         return this;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        final boolean result;
+        if (this == o) {
+            result = true;
+        } else if (o == null || getClass() != o.getClass()) {
+            result = false;
+        } else {
+            result = reflectionEquals(this, o);
+        }
+        return result;
+    }
+
+    @Override
+    public int hashCode() {
+        return reflectionHashCode(this);
+    }
 }

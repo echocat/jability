@@ -53,7 +53,7 @@ public abstract class BaseReferenceConfiguration extends BaseConfiguration {
         _fromField = fromField;
     }
 
-    @XmlAttribute(name = "accessType")
+    @XmlAttribute(name = "accessTypes")
     @XmlJavaTypeAdapter(AccessTypesAdapter.class)
     public List<AccessType> getAccessTypes() {
         return _accessTypes;
@@ -83,13 +83,13 @@ public abstract class BaseReferenceConfiguration extends BaseConfiguration {
             } else {
                 result = null;
             }
-            return result;
+            return result != null && !result.isEmpty() ? result : null;
         }
 
         @Override
         public String marshal(List<AccessType> v) throws Exception {
             final String result;
-            if (v != null) {
+            if (v != null && !v.isEmpty()) {
                 result = join(v, ",");
             } else {
                 result = null;

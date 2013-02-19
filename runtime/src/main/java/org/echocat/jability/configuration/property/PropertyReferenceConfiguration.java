@@ -18,5 +18,7 @@ import org.echocat.jability.configuration.support.BaseReferenceConfiguration;
 
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "propertyReference")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "propertyReference", namespace = SCHEMA_NAMESPACE)
 public class PropertyReferenceConfiguration extends BaseReferenceConfiguration implements UnderPropertiesRootConfiguration {}

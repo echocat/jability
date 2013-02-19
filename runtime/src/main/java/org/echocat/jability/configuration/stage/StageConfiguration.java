@@ -19,7 +19,9 @@ import org.echocat.jability.configuration.support.IdBasedConfiguration;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "stage")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "stage", namespace = SCHEMA_NAMESPACE)
 public class StageConfiguration extends IdBasedConfiguration implements UnderStagesRootConfiguration {
 
     private int _priority;

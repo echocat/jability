@@ -18,5 +18,7 @@ import org.echocat.jability.configuration.support.BaseReferenceConfiguration;
 
 import javax.xml.bind.annotation.XmlType;
 
-@XmlType(name = "capabilityReference")
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
+
+@XmlType(name = "capabilityReference", namespace = SCHEMA_NAMESPACE)
 public class CapabilityReferenceConfiguration extends BaseReferenceConfiguration implements UnderCapabilitiesRootConfiguration {}

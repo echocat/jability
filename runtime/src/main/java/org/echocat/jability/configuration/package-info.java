@@ -12,13 +12,18 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.configuration.capability;
+@XmlSchema(
+    namespace = SCHEMA_NAMESPACE,
+    location = SCHEMA_NAMESPACE,
+    xmlns = {},
+    elementFormDefault = QUALIFIED,
+    attributeFormDefault = UNQUALIFIED
+)
 
-import org.echocat.jability.configuration.support.TypeBasedConfiguration;
+package org.echocat.jability.configuration;
 
-import javax.xml.bind.annotation.XmlType;
+import javax.xml.bind.annotation.XmlSchema;
 
+import static javax.xml.bind.annotation.XmlNsForm.QUALIFIED;
+import static javax.xml.bind.annotation.XmlNsForm.UNQUALIFIED;
 import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
-
-@XmlType(name = "capabilityProvider", namespace = SCHEMA_NAMESPACE)
-public class CapabilityProviderConfiguration extends TypeBasedConfiguration implements UnderCapabilitiesRootConfiguration {}

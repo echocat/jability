@@ -34,9 +34,10 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.echocat.jability.Jability.AVAILABLE_STAGES;
 import static org.echocat.jability.Jability.CURRENT_STAGE;
+import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
-@XmlType(name = "stagesRoot", propOrder = {"current", "respectSystemProviders", "stages", "references", "availables", "providers"})
+@XmlType(name = "stagesRoot", propOrder = {"current", "respectSystemProviders", "availables", "stages", "references", "providers"}, namespace = SCHEMA_NAMESPACE)
 public class StagesRootConfiguration extends BaseConfiguration implements UnderConfiguration {
 
     @Nullable
@@ -129,7 +130,7 @@ public class StagesRootConfiguration extends BaseConfiguration implements UnderC
         _respectSystemProviders = respectSystemProviders;
     }
 
-    @XmlElement(name = "stage")
+    @XmlElement(name = "stage", namespace = SCHEMA_NAMESPACE)
     public List<StageConfiguration> getStages() {
         return _stages;
     }
@@ -138,7 +139,7 @@ public class StagesRootConfiguration extends BaseConfiguration implements UnderC
         _stages = stages;
     }
 
-    @XmlElement(name = "reference")
+    @XmlElement(name = "reference", namespace = SCHEMA_NAMESPACE)
     public List<StageReferenceConfiguration> getReferences() {
         return _references;
     }
@@ -147,7 +148,7 @@ public class StagesRootConfiguration extends BaseConfiguration implements UnderC
         _references = references;
     }
 
-    @XmlElement(name = "available", required = false)
+    @XmlElement(name = "available", required = false, namespace = SCHEMA_NAMESPACE)
     public List<AvailableStageConfiguration> getAvailables() {
         return _availables;
     }
@@ -156,7 +157,7 @@ public class StagesRootConfiguration extends BaseConfiguration implements UnderC
         _availables = availables;
     }
 
-    @XmlElement(name = "provider", required = false)
+    @XmlElement(name = "provider", required = false, namespace = SCHEMA_NAMESPACE)
     public List<StageProviderConfiguration> getProviders() {
         return _providers;
     }
