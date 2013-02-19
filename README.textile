@@ -1,0 +1,3 @@
+h1. echocat Jability
+
+"!https://secure.travis-ci.org/echocat/jability.png!":https://travis-ci.org/echocat/jability
