@@ -25,12 +25,12 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-public class BasePropertyProvider<T extends Property<?>> implements PropertyProvider {
+public abstract class BasePropertyProvider<T extends Property<?>> implements PropertyProvider {
 
     private final Map<String, T> _idToProperty;
 
     public BasePropertyProvider(@Nullable Iterable<T> definitions) {
-        _idToProperty = toIdToStage(definitions);
+        _idToProperty = toIdToProperty(definitions);
     }
 
     @Override
@@ -51,7 +51,7 @@ public class BasePropertyProvider<T extends Property<?>> implements PropertyProv
     }
 
     @Nonnull
-    protected Map<String, T> toIdToStage(@Nullable Iterable<T> definitions) {
+    protected Map<String, T> toIdToProperty(@Nullable Iterable<T> definitions) {
         final Map<String, T> result = new LinkedHashMap<>();
         if (definitions != null) {
             for (T definition : definitions) {

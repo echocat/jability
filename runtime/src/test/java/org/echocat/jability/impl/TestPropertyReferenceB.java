@@ -12,18 +12,18 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.configuration.impl;
+package org.echocat.jability.impl;
 
 import org.echocat.jability.property.Property;
 
 import static org.echocat.jability.property.support.PropertyUtils.newProperty;
 
 @SuppressWarnings("ConstantNamingConvention")
-public class TestPropertyReferenceA {
+public class TestPropertyReferenceB {
 
-    public static final Property<Boolean> testPropA1 = newProperty(Boolean.class, TestPropertyReferenceA.class, "testPropA1");
-    public static final Property<String> testPropA2 = newProperty(String.class, TestPropertyReferenceA.class, "testPropA2", "hello world! a");
-    public static final Property<String> bestPropA3 = newProperty(String.class, TestPropertyReferenceA.class, "bestPropA3");
+    public static final Property<Boolean> testPropB1 = newProperty(Boolean.class, TestPropertyReferenceB.class, "testPropB1");
+    public static final Property<String> testPropB2 = newProperty(String.class, TestPropertyReferenceB.class, "testPropB2", "hello world! b");
+    public static final Property<String> bestPropB3 = newProperty(String.class, TestPropertyReferenceB.class, "bestPropB3");
 
-    private TestPropertyReferenceA() {}
+    private TestPropertyReferenceB() {}
 }

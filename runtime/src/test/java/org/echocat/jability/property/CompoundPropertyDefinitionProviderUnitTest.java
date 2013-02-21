@@ -20,6 +20,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.echocat.jability.direct.DirectJability.propertyProvider;
+import static org.echocat.jability.property.Property.*;
 import static org.echocat.jomon.testing.Assert.assertThat;
 import static org.echocat.jomon.testing.BaseMatchers.is;
 import static org.echocat.jomon.testing.BaseMatchers.isSameAs;
@@ -29,22 +30,22 @@ public class CompoundPropertyDefinitionProviderUnitTest {
 
     @Test
     public void test() throws Exception {
-        assertThat(propertyProvider().provideBy(Date.class, Property.validFrom.getId()), isSameAs(Property.validFrom));
-        assertThat(propertyProvider().provideBy(Date.class, Property.validTo.getId()), isSameAs(Property.validTo));
-        assertThat(propertyProvider().provideBy(Stage.class, Property.minimumRequiredStage.getId()), isSameAs(Property.minimumRequiredStage));
+        assertThat(propertyProvider().provideBy(Date.class, validFrom.getId()), isSameAs(validFrom));
+        assertThat(propertyProvider().provideBy(Date.class, validTo.getId()), isSameAs(validTo));
+        assertThat(propertyProvider().provideBy(Stage.class, minimumRequiredStage.getId()), isSameAs(minimumRequiredStage));
     }
 
     @Test
     public void testWrongType() throws Exception {
         try {
-            propertyProvider().provideBy(String.class, Property.validFrom.getId());
+            propertyProvider().provideBy(String.class, validFrom.getId());
             fail("expected exception missing");
         } catch (IllegalArgumentException expected) {}
     }
 
     @Test
     public void testNotExisting() throws Exception {
-        assertThat(propertyProvider().provideBy(String.class, Property.validFrom.getId() + "x"), is(null));
+        assertThat(propertyProvider().provideBy(String.class, validFrom.getId() + "x"), is(null));
     }
 
 }

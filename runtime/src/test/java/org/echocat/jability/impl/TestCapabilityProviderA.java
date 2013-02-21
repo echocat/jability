@@ -12,18 +12,8 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.configuration.impl;
+package org.echocat.jability.impl;
 
-import org.echocat.jability.stage.Stage;
+import org.echocat.jability.support.NoopCapabilityProvider;
 
-import static org.echocat.jability.stage.support.StageUtils.newStage;
-
-@SuppressWarnings("ConstantNamingConvention")
-public class TestStageReferenceB {
-
-    public static final Stage testStageB1 = newStage("testStageB1", 120);
-    public static final Stage testStageB2 = newStage("testStageB2", 220);
-    public static final Stage bestStageB3 = newStage("bestStageB3", 320);
-
-    private TestStageReferenceB() {}
-}
+public class TestCapabilityProviderA extends NoopCapabilityProvider {}

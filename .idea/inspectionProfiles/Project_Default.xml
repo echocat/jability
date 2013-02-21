@@ -1,7 +1,7 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0" is_locked="false">
     <option name="myName" value="Project Default" />
-    <option name="myLocal" value="true" />
+    <option name="myLocal" value="false" />
     <inspection_tool class="AbstractMethodOverridesAbstractMethod" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoreJavaDoc" value="true" />
       <option name="ignoreAnnotations" value="true" />
@@ -55,7 +55,7 @@
       <option name="DONT_REPORT_TRUE_ASSERT_STATEMENTS" value="false" />
     </inspection_tool>
     <inspection_tool class="ConstantIfStatement" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="ConstantNamingConvention" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="ConstantNamingConvention" enabled="true" level="WEAK WARNING" enabled_by_default="true">
       <option name="onlyCheckImmutables" value="false" />
       <option name="m_regex" value="[A-Z][A-Z_\d]*" />
       <option name="m_minLength" value="2" />
@@ -127,6 +127,7 @@
     </inspection_tool>
     <inspection_tool class="FieldMayBeFinal" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="FinalizeNotProtected" enabled="true" level="WARNING" enabled_by_default="true" />
+    <inspection_tool class="Fix shebang" enabled="true" level="WARNING" enabled_by_default="true">/bin/sh#/bin/bash</inspection_tool>
     <inspection_tool class="ForCanBeForeach" enabled="true" level="INFO" enabled_by_default="true">
       <option name="REPORT_INDEXED_LOOP" value="true" />
       <option name="ignoreUntypedCollections" value="false" />

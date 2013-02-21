@@ -28,7 +28,6 @@ import java.util.Date;
 import static org.echocat.jability.property.PropertyUtils.newPropertyDefinition;
 import static org.echocat.jability.value.support.DefinitionIdUtils.buildCapabilityDefinitionIdFrom;
 
-@SuppressWarnings("ConstantNamingConvention")
 public interface Property<V> extends Value<V> {
 
     @Including

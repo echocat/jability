@@ -15,7 +15,7 @@
 package org.echocat.jability.configuration;
 
 import org.apache.commons.io.IOUtils;
-import org.echocat.jability.configuration.impl.*;
+import org.echocat.jability.impl.*;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
@@ -30,13 +30,13 @@ import static org.junit.Assert.assertThat;
 public class ConfigurationUnitTest {
 
     @Test
-    public void testMarshall() throws Exception {
+    public void testBasicMarshall() throws Exception {
         final Configuration configuration = configurationReference();
         assertThat(marshal(configuration), is(exampleConfigurationContent()));
     }
 
     @Test
-    public void testUnmarshall() throws Exception {
+    public void testBasicUnmarshall() throws Exception {
         final Configuration configuration = configurationReference();
         final String marshalled = marshal(configuration);
         final Configuration unmarshalled = unmarshal(marshalled);

@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import static java.lang.Boolean.TRUE;
 import static java.lang.System.getProperty;
-import static org.echocat.jability.Jability.AUTO_PROPAGATE_NAME;
+import static org.echocat.jability.Jability.AUTO_PROPAGATE_OVER_JMX;
 import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
@@ -34,7 +34,7 @@ public class JmxRootConfiguration extends BaseConfiguration implements UnderConf
 
     @Nullable
     public static Boolean getAutoPropagatePerDefaultState() {
-        final String value = getProperty(AUTO_PROPAGATE_NAME);
+        final String value = getProperty(AUTO_PROPAGATE_OVER_JMX);
         return value != null ? TRUE.toString().equalsIgnoreCase(value) : null;
     }
 

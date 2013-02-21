@@ -12,8 +12,8 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.configuration.impl;
+package org.echocat.jability.impl;
 
-import org.echocat.jability.property.support.NoopPropertyProvider;
+import org.echocat.jability.stage.support.NoopStageProvider;
 
-public class TestPropertyProviderB extends NoopPropertyProvider {}
+public class TestStageProviderB extends NoopStageProvider {}

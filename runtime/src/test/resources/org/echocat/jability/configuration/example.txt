@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <configuration xmlns="https://jability.echocat.org/schemas/jability.xsd">
     <capabilities respectSystemCapabilities="true" respectSystemProviders="true">
-        <capabilities type="org.echocat.jability.configuration.impl.TestCapabilitiesA"/>
-        <capabilities type="org.echocat.jability.configuration.impl.TestCapabilitiesB"/>
-        <reference fromField="/test.*/" fromType="org.echocat.jability.configuration.impl.TestCapabilityReferenceA"/>
-        <reference fromField="/test.*/" fromType="org.echocat.jability.configuration.impl.TestCapabilityReferenceB"/>
-        <provider type="org.echocat.jability.configuration.impl.TestCapabilityProviderA"/>
-        <provider type="org.echocat.jability.configuration.impl.TestCapabilityProviderB"/>
+        <capabilities type="org.echocat.jability.impl.TestCapabilitiesA"/>
+        <capabilities type="org.echocat.jability.impl.TestCapabilitiesB"/>
+        <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestCapabilityReferenceA"/>
+        <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestCapabilityReferenceB"/>
+        <provider type="org.echocat.jability.impl.TestCapabilityProviderA"/>
+        <provider type="org.echocat.jability.impl.TestCapabilityProviderB"/>
     </capabilities>
     <stages current="testCurrent" respectSystemProviders="true">
         <available id="a"/>
@@ -16,18 +16,18 @@
         <stage priority="2" id="b"/>
         <stage priority="3" id="c"/>
         <stage priority="4" id="d"/>
-        <reference fromField="/test.*/" fromType="org.echocat.jability.configuration.impl.TestStageReferenceA"/>
-        <reference fromField="/test.*/" fromType="org.echocat.jability.configuration.impl.TestStageReferenceB"/>
-        <provider type="org.echocat.jability.configuration.impl.TestStageProviderA"/>
-        <provider type="org.echocat.jability.configuration.impl.TestStageProviderB"/>
+        <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestStageReferenceA"/>
+        <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestStageReferenceB"/>
+        <provider type="org.echocat.jability.impl.TestStageProviderA"/>
+        <provider type="org.echocat.jability.impl.TestStageProviderB"/>
     </stages>
     <properties respectSystemProperties="true" respectSystemProviders="true">
-        <properties type="org.echocat.jability.configuration.impl.TestPropertiesA"/>
-        <properties type="org.echocat.jability.configuration.impl.TestPropertiesB"/>
-        <reference fromField="/test.*/" fromType="org.echocat.jability.configuration.impl.TestPropertyReferenceA"/>
-        <reference fromField="/test.*/" fromType="org.echocat.jability.configuration.impl.TestPropertyReferenceB"/>
-        <provider type="org.echocat.jability.configuration.impl.TestPropertyProviderA"/>
-        <provider type="org.echocat.jability.configuration.impl.TestPropertyProviderB"/>
+        <properties type="org.echocat.jability.impl.TestPropertiesA"/>
+        <properties type="org.echocat.jability.impl.TestPropertiesB"/>
+        <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestPropertyReferenceA"/>
+        <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestPropertyReferenceB"/>
+        <provider type="org.echocat.jability.impl.TestPropertyProviderA"/>
+        <provider type="org.echocat.jability.impl.TestPropertyProviderB"/>
     </properties>
     <jmx propagate="true"/>
 </configuration>

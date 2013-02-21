@@ -12,18 +12,18 @@
  * *** END LICENSE BLOCK *****
  ****************************************************************************************/
 
-package org.echocat.jability.configuration.impl;
+package org.echocat.jability.impl;
 
 import org.echocat.jability.stage.Stage;
 
 import static org.echocat.jability.stage.support.StageUtils.newStage;
 
 @SuppressWarnings("ConstantNamingConvention")
-public class TestStageReferenceA {
+public class TestStageReferenceB {
 
-    public static final Stage testStageA1 = newStage("testStageA1", 110);
-    public static final Stage testStageA2 = newStage("testStageA2", 210);
-    public static final Stage bestStageA3 = newStage("bestStageA3", 310);
+    public static final Stage testStageB1 = newStage("testStageB1", 120);
+    public static final Stage testStageB2 = newStage("testStageB2", 220);
+    public static final Stage bestStageB3 = newStage("bestStageB3", 320);
 
-    private TestStageReferenceA() {}
+    private TestStageReferenceB() {}
 }

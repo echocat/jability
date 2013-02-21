@@ -28,12 +28,16 @@ import static org.echocat.jability.support.DiscoverUtils.loadClassBy;
 
 public class FieldBasedPropertyProvider<T extends Property<?>> extends BasePropertyProvider<T> {
 
-    public FieldBasedPropertyProvider(@Nonnull Class<? extends T> definitionType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldPattern, @Nullable AccessType... accessTypes) {
-        super(discoverStaticFieldValuesBy(definitionType, startFrom, stopAt, fieldPattern, accessTypes));
+    @SuppressWarnings("rawtypes")
+    public FieldBasedPropertyProvider(@Nonnull Class<? extends Property> definitionType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldPattern, @Nullable AccessType... accessTypes) {
+        //noinspection RedundantCast,unchecked
+        super(discoverStaticFieldValuesBy((Class<T>) (Object) definitionType, startFrom, stopAt, fieldPattern, accessTypes));
     }
 
-    public FieldBasedPropertyProvider(@Nonnull Class<? extends T> definitionType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldPattern, @Nullable Collection<AccessType> accessTypes) {
-        super(discoverStaticFieldValuesBy(definitionType, startFrom, stopAt, fieldPattern, accessTypes));
+    @SuppressWarnings("rawtypes")
+    public FieldBasedPropertyProvider(@Nonnull Class<? extends Property> definitionType, @Nonnull Class<?> startFrom, @Nullable Class<?> stopAt, @Nullable Pattern fieldPattern, @Nullable Collection<AccessType> accessTypes) {
+        //noinspection RedundantCast,unchecked
+        super(discoverStaticFieldValuesBy((Class<T>) (Object) definitionType, startFrom, stopAt, fieldPattern, accessTypes));
     }
 
     public FieldBasedPropertyProvider(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {

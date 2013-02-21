@@ -24,7 +24,7 @@ public interface Jability extends AutoCloseable {
 
     public static final String CURRENT_STAGE = "org.echocat.jability.stage.current";
     public static final String AVAILABLE_STAGES = "org.echocat.jability.stage.availables";
-    public static final String AUTO_PROPAGATE_NAME = "org.echocat.jability.autoPropagate";
+    public static final String AUTO_PROPAGATE_OVER_JMX = "org.echocat.jability.autoPropagateOverJmx";
 
     @Nonnull
     public CapabilityProvider getCapabilityProvider();
