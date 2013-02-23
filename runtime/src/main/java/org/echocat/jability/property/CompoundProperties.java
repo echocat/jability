@@ -14,6 +14,7 @@
 
 package org.echocat.jability.property;
 
+import com.google.common.base.Predicate;
 import org.echocat.jability.Capability;
 import org.echocat.jability.value.CompoundValues;
 import org.echocat.jomon.runtime.iterators.ChainedIterator;
@@ -21,7 +22,11 @@ import org.echocat.jomon.runtime.util.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import static com.google.common.collect.Iterators.filter;
 
 public class CompoundProperties extends CompoundValues<Properties> implements Properties {
 
@@ -106,11 +111,18 @@ public class CompoundProperties extends CompoundValues<Properties> implements Pr
     @Nonnull
     @Override
     public Iterator<Entry<Property<?>, Object>> iterator(@Nonnull final Capability<?> capability) {
+        final Set<Property<?>> alreadyReturnedProperties = new HashSet<>();
         return new ChainedIterator<Properties, Entry<Property<?>, Object>>(getDelegates()) {
             @Nullable
             @Override
             protected Iterator<Entry<Property<?>, Object>> nextIterator(@Nullable Properties input) {
-                return input.iterator(capability);
+                final Iterator<Entry<Property<?>, Object>> i = input.iterator(capability);
+                return i != null ? filter(i, new Predicate<Entry<Property<?>, Object>>() {
+                    @Override
+                    public boolean apply(@Nullable Entry<Property<?>, Object> input) {
+                        return alreadyReturnedProperties.add(input.getKey());
+                    }
+                }) : null;
             }
         };
     }

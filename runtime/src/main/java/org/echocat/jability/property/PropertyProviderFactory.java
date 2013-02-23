@@ -16,13 +16,14 @@ package org.echocat.jability.property;
 
 import org.echocat.jability.configuration.Configuration;
 import org.echocat.jability.configuration.property.PropertiesRootConfiguration;
-import org.echocat.jability.configuration.property.PropertyReferenceConfiguration;
 import org.echocat.jability.configuration.property.PropertyProviderConfiguration;
-import org.echocat.jability.property.support.FieldBasedPropertyProvider;
+import org.echocat.jability.configuration.property.PropertyReferenceConfiguration;
+import org.echocat.jability.property.support.DefaultPropertyProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.ServiceLoader.load;
@@ -62,8 +63,7 @@ public class PropertyProviderFactory {
         final ClassLoader targetClassLoader = selectClassLoader(classLoader);
         addAll(providers, load(PropertyProvider.class, targetClassLoader));
         for (Class<?> currentType : discoverTypesOf(Property.class, null, targetClassLoader)) {
-            // noinspection unchecked
-            providers.add(new FieldBasedPropertyProvider(Property.class, currentType, null, null, PUBLIC));
+            providers.add(getPropertyProviderBy(currentType));
         }
         return asImmutableList(providers);
     }
@@ -73,10 +73,33 @@ public class PropertyProviderFactory {
         final List<PropertyProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (PropertyReferenceConfiguration configuration : configurations) {
-                providers.add(new FieldBasedPropertyProvider<>(classLoader, configuration));
+                providers.add(getPropertyProviderBy(classLoader, configuration));
             }
         }
         return asImmutableList(providers);
+    }
+
+    @Nonnull
+    protected static Collection<Property<?>> getPropertiesBy(@Nonnull Class<?> type) {
+        //noinspection rawtypes,unchecked
+        return (Collection<Property<?>>) (Collection) discoverStaticFieldValuesBy(Property.class, type, null, null, PUBLIC);
+    }
+
+    @Nonnull
+    protected static PropertyProvider getPropertyProviderBy(@Nonnull Class<?> type) {
+        return new DefaultPropertyProvider<>(getPropertiesBy(type));
+    }
+
+    @Nonnull
+    protected static Collection<Property<?>> getPropertiesBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
+        final Class<?> startFrom = loadClassBy(classLoader, configuration.getFromType());
+        //noinspection rawtypes,unchecked
+        return (Collection<Property<?>>) (Collection) discoverStaticFieldValuesBy(Property.class, startFrom, null, configuration.getFromField(), configuration.getAccessTypes());
+    }
+
+    @Nonnull
+    protected static PropertyProvider getPropertyProviderBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
+        return new DefaultPropertyProvider<>(getPropertiesBy(classLoader, configuration));
     }
 
     @Nonnull

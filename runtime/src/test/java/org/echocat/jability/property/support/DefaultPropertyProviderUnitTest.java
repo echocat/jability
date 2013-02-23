@@ -16,25 +16,23 @@ package org.echocat.jability.property.support;
 
 import org.echocat.jability.property.Property;
 import org.echocat.jability.property.PropertyProvider;
+import org.echocat.jomon.runtime.CollectionUtils;
+import org.echocat.jomon.testing.IteratorMatchers;
 import org.junit.Test;
 
 import javax.annotation.Nonnull;
 
-import static java.util.regex.Pattern.compile;
 import static org.echocat.jability.property.PropertyUtils.newPropertyDefinition;
-import static org.echocat.jability.support.AccessType.PROTECTED;
 import static org.echocat.jomon.testing.Assert.assertThat;
 import static org.echocat.jomon.testing.BaseMatchers.is;
 import static org.echocat.jomon.testing.BaseMatchers.isSameAs;
 import static org.junit.Assert.fail;
 
-public class FieldBasedPropertyProviderUnitTest {
+public class DefaultPropertyProviderUnitTest {
 
-    protected static final Property<String> A = newPropertyDefinition(String.class, BasePropertyProviderUnitTest.class, "a");
-    protected static final Property<Integer> B = newPropertyDefinition(Integer.class, BasePropertyProviderUnitTest.class, "b");
-    protected static final Property<String> C = newPropertyDefinition(String.class, BasePropertyProviderUnitTest.class, "c");
-    public static final Property<String> D = newPropertyDefinition(String.class, BasePropertyProviderUnitTest.class, "d");
-    protected static final Property<String> E = newPropertyDefinition(String.class, BasePropertyProviderUnitTest.class, "e");
+    protected static final Property<String> A = newPropertyDefinition(String.class, DefaultPropertyProviderUnitTest.class, "a");
+    protected static final Property<Integer> B = newPropertyDefinition(Integer.class, DefaultPropertyProviderUnitTest.class, "b");
+    protected static final Property<String> C = newPropertyDefinition(String.class, DefaultPropertyProviderUnitTest.class, "c");
 
     @Test
     public void test() throws Exception {
@@ -42,8 +40,11 @@ public class FieldBasedPropertyProviderUnitTest {
         assertThat(propertyProvider.provideBy(String.class, A.getId()), isSameAs(A));
         assertThat(propertyProvider.provideBy(Integer.class, B.getId()), isSameAs(B));
         assertThat(propertyProvider.provideBy(String.class, C.getId()), isSameAs(C));
-        assertThat(propertyProvider.provideBy(String.class, D.getId()), is(null));
-        assertThat(propertyProvider.provideBy(String.class, E.getId()), is(null));
+    }
+
+    @Test
+    public void testIterator() throws Exception {
+        assertThat(propertyProvider().iterator(), IteratorMatchers.<Property<?>>returnsAllItemsOf(A, B, C));
     }
 
     @Test
@@ -61,7 +62,7 @@ public class FieldBasedPropertyProviderUnitTest {
 
     @Nonnull
     protected static PropertyProvider propertyProvider() {
-        return new FieldBasedPropertyProvider<>(Property.class, FieldBasedPropertyProviderUnitTest.class, null, compile("[A-D]"), PROTECTED);
+        return new DefaultPropertyProvider<Property<?>>(CollectionUtils.<Property<?>>asImmutableList(A, B, C)) {};
     }
 
 }

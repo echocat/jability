@@ -14,14 +14,17 @@
 
 package org.echocat.jability.value;
 
+import com.google.common.base.Predicate;
 import org.echocat.jomon.runtime.iterators.ChainedIterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 
-import static org.echocat.jomon.runtime.CollectionUtils.asList;
+import static com.google.common.collect.Iterators.filter;
 
 public abstract class CompoundValueProvider<V extends Value<?>, P extends ValueProvider<V>> implements ValueProvider<V> {
 
@@ -29,10 +32,6 @@ public abstract class CompoundValueProvider<V extends Value<?>, P extends ValueP
 
     protected CompoundValueProvider(@Nullable Iterable<P> delegates) {
         _delegates = delegates != null ? delegates : Collections.<P>emptyList();
-    }
-
-    protected CompoundValueProvider(@Nullable P... delegates) {
-        this(delegates != null ? asList(delegates) : null);
     }
 
     @Nullable
@@ -50,8 +49,15 @@ public abstract class CompoundValueProvider<V extends Value<?>, P extends ValueP
 
     @Override
     public Iterator<V> iterator() {
+        final Set<V> alreadyReturnedValue = new HashSet<>();
         return new ChainedIterator<P, V>(_delegates.iterator()) { @Nullable @Override protected Iterator<V> nextIterator(@Nullable P input) {
-            return input.iterator();
+            final Iterator<V> i = input.iterator();
+            return i != null ? filter(i, new Predicate<V>() {
+                @Override
+                public boolean apply(@Nullable V input) {
+                    return alreadyReturnedValue.add(input);
+                }
+            }) : null;
         }};
     }
 

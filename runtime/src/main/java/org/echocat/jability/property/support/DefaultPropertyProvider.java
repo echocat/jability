@@ -25,11 +25,11 @@ import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
-public abstract class BasePropertyProvider<T extends Property<?>> implements PropertyProvider {
+public class DefaultPropertyProvider<T extends Property<?>> implements PropertyProvider {
 
     private final Map<String, T> _idToProperty;
 
-    public BasePropertyProvider(@Nullable Iterable<T> definitions) {
+    public DefaultPropertyProvider(@Nullable Iterable<T> definitions) {
         _idToProperty = toIdToProperty(definitions);
     }
 

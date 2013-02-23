@@ -19,6 +19,8 @@ import org.echocat.jability.value.CompoundValueProvider;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static org.echocat.jomon.runtime.CollectionUtils.asList;
+
 public class CompoundPropertyProvider extends CompoundValueProvider<Property<?>, PropertyProvider> implements PropertyProvider {
 
     public CompoundPropertyProvider(@Nullable Iterable<PropertyProvider> delegates) {
@@ -26,7 +28,7 @@ public class CompoundPropertyProvider extends CompoundValueProvider<Property<?>,
     }
 
     public CompoundPropertyProvider(@Nullable PropertyProvider... delegates) {
-        super(delegates);
+        this(delegates != null ? asList(delegates) : null);
     }
 
     @Nullable
