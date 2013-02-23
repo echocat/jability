@@ -25,17 +25,17 @@ import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.Date;
 
-import static org.echocat.jability.property.PropertyUtils.newPropertyDefinition;
+import static org.echocat.jability.property.support.PropertyUtils.newProperty;
 import static org.echocat.jability.value.support.DefinitionIdUtils.buildCapabilityDefinitionIdFrom;
 
 public interface Property<V> extends Value<V> {
 
     @Including
-    public static final Property<Date> validFrom = newPropertyDefinition(Date.class, Property.class, "validFrom");
+    public static final Property<Date> validFrom = newProperty(Date.class, Property.class, "validFrom");
     @Excluding
-    public static final Property<Date> validTo = newPropertyDefinition(Date.class, Property.class, "validTo");
+    public static final Property<Date> validTo = newProperty(Date.class, Property.class, "validTo");
     @Including
-    public static final Property<Stage> minimumRequiredStage = newPropertyDefinition(Stage.class, Property.class, "minimumRequiredStage");
+    public static final Property<Stage> minimumRequiredStage = newProperty(Stage.class, Property.class, "minimumRequiredStage");
 
     @ThreadSafe
     @Immutable

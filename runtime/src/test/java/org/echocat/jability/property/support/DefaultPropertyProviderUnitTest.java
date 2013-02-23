@@ -22,7 +22,7 @@ import org.junit.Test;
 
 import javax.annotation.Nonnull;
 
-import static org.echocat.jability.property.PropertyUtils.newPropertyDefinition;
+import static org.echocat.jability.property.support.PropertyUtils.newProperty;
 import static org.echocat.jomon.testing.Assert.assertThat;
 import static org.echocat.jomon.testing.BaseMatchers.is;
 import static org.echocat.jomon.testing.BaseMatchers.isSameAs;
@@ -30,9 +30,9 @@ import static org.junit.Assert.fail;
 
 public class DefaultPropertyProviderUnitTest {
 
-    protected static final Property<String> A = newPropertyDefinition(String.class, DefaultPropertyProviderUnitTest.class, "a");
-    protected static final Property<Integer> B = newPropertyDefinition(Integer.class, DefaultPropertyProviderUnitTest.class, "b");
-    protected static final Property<String> C = newPropertyDefinition(String.class, DefaultPropertyProviderUnitTest.class, "c");
+    protected static final Property<String> A = newProperty(String.class, DefaultPropertyProviderUnitTest.class, "a");
+    protected static final Property<Integer> B = newProperty(Integer.class, DefaultPropertyProviderUnitTest.class, "b");
+    protected static final Property<String> C = newProperty(String.class, DefaultPropertyProviderUnitTest.class, "c");
 
     @Test
     public void test() throws Exception {
