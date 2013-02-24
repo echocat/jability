@@ -16,9 +16,11 @@ package org.echocat.jability.configuration.property;
 
 import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlType;
 
 import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 
 @XmlType(name = "propertyProvider", namespace = SCHEMA_NAMESPACE)
+@NotThreadSafe
 public class PropertyProviderConfiguration extends TypeBasedConfiguration implements UnderPropertiesRootConfiguration {}

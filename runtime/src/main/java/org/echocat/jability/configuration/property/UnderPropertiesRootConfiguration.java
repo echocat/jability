@@ -17,9 +17,13 @@ package org.echocat.jability.configuration.property;
 import org.echocat.jability.configuration.UnderConfiguration.SingleValueConfiguration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 public interface UnderPropertiesRootConfiguration {
 
+    @ThreadSafe
+    @Immutable
     public static class RespectSystemProperties extends SingleValueConfiguration<Boolean> implements UnderPropertiesRootConfiguration {
 
         public RespectSystemProperties(boolean value) {
@@ -33,6 +37,8 @@ public interface UnderPropertiesRootConfiguration {
         }
     }
 
+    @ThreadSafe
+    @Immutable
     public static class RespectSystemProvider extends SingleValueConfiguration<Boolean> implements UnderPropertiesRootConfiguration {
 
         public RespectSystemProvider(boolean value) {

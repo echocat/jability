@@ -19,6 +19,8 @@ import org.echocat.jomon.runtime.iterators.ChainedIterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,11 +28,13 @@ import java.util.Set;
 
 import static com.google.common.collect.Iterators.filter;
 
-public abstract class CompoundValueProvider<V extends Value<?>, P extends ValueProvider<V>> implements ValueProvider<V> {
+@ThreadSafe
+@Immutable
+public class CompoundValueProvider<V extends Value<?>, P extends ValueProvider<V>> implements ValueProvider<V> {
 
     private final Iterable<P> _delegates;
 
-    protected CompoundValueProvider(@Nullable Iterable<P> delegates) {
+    public CompoundValueProvider(@Nullable Iterable<P> delegates) {
         _delegates = delegates != null ? delegates : Collections.<P>emptyList();
     }
 

@@ -22,12 +22,14 @@ import org.echocat.jomon.runtime.util.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
 import static com.google.common.collect.Iterators.filter;
 
+@ThreadSafe
 public class CompoundProperties extends CompoundValues<Properties> implements Properties {
 
     public CompoundProperties(@Nullable Iterable<Properties> delegates) {

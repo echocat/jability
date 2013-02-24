@@ -22,6 +22,8 @@ import org.echocat.jability.support.FieldBasedCapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -31,6 +33,8 @@ import static org.echocat.jability.support.DiscoverUtils.*;
 import static org.echocat.jomon.runtime.CollectionUtils.addAll;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
+@ThreadSafe
+@Immutable
 public class CapabilityProviderFactory {
 
     @Nonnull

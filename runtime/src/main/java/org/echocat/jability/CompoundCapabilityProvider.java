@@ -18,9 +18,13 @@ import org.echocat.jability.value.CompoundValueProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
+@ThreadSafe
+@Immutable
 public class CompoundCapabilityProvider extends CompoundValueProvider<Capability<?>, CapabilityProvider> implements CapabilityProvider {
 
     public CompoundCapabilityProvider(@Nullable Iterable<CapabilityProvider> delegates) {

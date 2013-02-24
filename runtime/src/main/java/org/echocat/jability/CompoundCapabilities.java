@@ -20,8 +20,10 @@ import org.echocat.jomon.runtime.util.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Iterator;
 
+@ThreadSafe
 public class CompoundCapabilities extends CompoundValues<Capabilities> implements Capabilities {
 
     public CompoundCapabilities(@Nullable Iterable<Capabilities> delegates) {

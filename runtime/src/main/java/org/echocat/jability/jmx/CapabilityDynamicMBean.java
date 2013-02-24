@@ -18,10 +18,14 @@ import org.echocat.jability.Capabilities;
 import org.echocat.jability.Capability;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.management.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@ThreadSafe
+@Immutable
 public class CapabilityDynamicMBean implements DynamicMBean {
 
     private final Capability<Object> _capability;

@@ -16,10 +16,12 @@ package org.echocat.jability.support;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+@NotThreadSafe
 public class TypeIterator<T> implements Iterator<Class<? extends T>> {
 
     private final Class<?> _baseType;

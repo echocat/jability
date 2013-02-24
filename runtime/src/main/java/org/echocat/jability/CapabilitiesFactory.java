@@ -20,6 +20,8 @@ import org.echocat.jability.configuration.capability.CapabilitiesRootConfigurati
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,6 +30,8 @@ import static org.echocat.jability.support.DiscoverUtils.createInstanceBy;
 import static org.echocat.jability.support.DiscoverUtils.selectClassLoader;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
+@ThreadSafe
+@Immutable
 public class CapabilitiesFactory {
 
     @Nonnull

@@ -19,6 +19,8 @@ import org.echocat.jability.stage.StageProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -26,6 +28,8 @@ import java.util.Map;
 import static java.util.Collections.unmodifiableMap;
 import static org.echocat.jability.stage.Stages.unknown;
 
+@ThreadSafe
+@Immutable
 public class DefaultStageProvider<T extends Stage> implements StageProvider {
 
     private final Map<String, T> _idToStage;

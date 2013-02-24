@@ -19,12 +19,16 @@ import org.echocat.jability.property.PropertyProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
+@ThreadSafe
+@Immutable
 public class DefaultPropertyProvider<T extends Property<?>> implements PropertyProvider {
 
     private final Map<String, T> _idToProperty;

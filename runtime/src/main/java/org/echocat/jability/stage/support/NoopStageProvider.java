@@ -19,11 +19,15 @@ import org.echocat.jability.stage.StageProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Iterator;
 
 import static org.echocat.jability.stage.Stages.unknown;
 import static org.echocat.jomon.runtime.CollectionUtils.emptyIterator;
 
+@ThreadSafe
+@Immutable
 public class NoopStageProvider implements StageProvider {
 
     @Nullable

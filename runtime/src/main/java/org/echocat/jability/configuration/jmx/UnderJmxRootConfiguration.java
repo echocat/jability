@@ -17,9 +17,13 @@ package org.echocat.jability.configuration.jmx;
 import org.echocat.jability.configuration.UnderConfiguration.SingleValueConfiguration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 public interface UnderJmxRootConfiguration {
 
+    @ThreadSafe
+    @Immutable
     public static class Propagate extends SingleValueConfiguration<Boolean> implements UnderJmxRootConfiguration {
 
         public Propagate(boolean value) {

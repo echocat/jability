@@ -22,6 +22,7 @@ import org.echocat.jability.configuration.support.BaseConfiguration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
@@ -31,6 +32,7 @@ import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 @XmlRootElement(name = "configuration")
 @XmlType(name = "configuration", propOrder = {"capabilities", "stages", "properties", "jmx"}, namespace = SCHEMA_NAMESPACE)
+@NotThreadSafe
 public class Configuration extends BaseConfiguration {
 
     private CapabilitiesRootConfiguration _capabilities;

@@ -15,6 +15,7 @@
 package org.echocat.jability.property;
 
 import org.echocat.jability.stage.Stage;
+import org.echocat.jability.support.IdUtils;
 import org.echocat.jability.value.Value;
 import org.echocat.jomon.runtime.annotations.Excluding;
 import org.echocat.jomon.runtime.annotations.Including;
@@ -26,7 +27,6 @@ import javax.annotation.concurrent.ThreadSafe;
 import java.util.Date;
 
 import static org.echocat.jability.property.support.PropertyUtils.newProperty;
-import static org.echocat.jability.value.support.DefinitionIdUtils.buildCapabilityDefinitionIdFrom;
 
 public interface Property<V> extends Value<V> {
 
@@ -46,7 +46,7 @@ public interface Property<V> extends Value<V> {
         }
 
         public Impl(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId, @Nullable V defaultValue) {
-            this(valueType, buildCapabilityDefinitionIdFrom(basedOn, subId), defaultValue);
+            this(valueType, IdUtils.buildIdFrom(basedOn, subId), defaultValue);
         }
 
         @Override

@@ -22,6 +22,7 @@ import org.echocat.jability.configuration.support.BaseConfiguration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
@@ -38,6 +39,7 @@ import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_N
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 @XmlType(name = "stagesRoot", propOrder = {"current", "respectSystemProviders", "availables", "stages", "references", "providers"}, namespace = SCHEMA_NAMESPACE)
+@NotThreadSafe
 public class StagesRootConfiguration extends BaseConfiguration implements UnderConfiguration {
 
     @Nullable

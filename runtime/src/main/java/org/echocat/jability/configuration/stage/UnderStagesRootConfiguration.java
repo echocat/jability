@@ -17,9 +17,13 @@ package org.echocat.jability.configuration.stage;
 import org.echocat.jability.configuration.UnderConfiguration.SingleValueConfiguration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 public interface UnderStagesRootConfiguration {
 
+    @ThreadSafe
+    @Immutable
     public static class RespectSystemProvider extends SingleValueConfiguration<Boolean> implements UnderStagesRootConfiguration {
 
         public RespectSystemProvider(boolean value) {
@@ -33,6 +37,8 @@ public interface UnderStagesRootConfiguration {
         }
     }
 
+    @ThreadSafe
+    @Immutable
     public static class CurrentId extends SingleValueConfiguration<String> implements UnderStagesRootConfiguration {
 
         public CurrentId(String value) {

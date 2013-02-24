@@ -20,9 +20,13 @@ import org.echocat.jability.configuration.jmx.JmxRootConfiguration;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 import static org.echocat.jability.configuration.jmx.JmxRootConfiguration.isAutoPropagateEnabledBasedOn;
 
+@ThreadSafe
+@Immutable
 public class CapabilityPropagaterFactory {
 
     @Nullable

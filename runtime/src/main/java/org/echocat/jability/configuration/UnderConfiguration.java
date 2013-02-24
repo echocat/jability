@@ -15,9 +15,13 @@
 package org.echocat.jability.configuration;
 
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 
 public interface UnderConfiguration {
 
+    @ThreadSafe
+    @Immutable
     public static class SingleValueConfiguration<T> {
 
         private final T _value;

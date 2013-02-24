@@ -19,6 +19,8 @@ import org.echocat.jability.Jability;
 import org.echocat.jomon.runtime.util.Duration;
 
 import javax.annotation.Nonnull;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import javax.management.*;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -27,6 +29,8 @@ import java.util.Set;
 import static java.lang.management.ManagementFactory.getPlatformMBeanServer;
 import static org.echocat.jomon.runtime.concurrent.ThreadUtils.stop;
 
+@ThreadSafe
+@Immutable
 public class CapabilityPropagater implements AutoCloseable {
 
     private final MBeanServer _server;

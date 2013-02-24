@@ -14,10 +14,12 @@
 
 package org.echocat.jability.configuration.support;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlAttribute;
 
 import static org.echocat.jability.support.DiscoverUtils.nameOf;
 
+@NotThreadSafe
 public abstract class TypeBasedConfiguration extends BaseConfiguration {
 
     private String _type;

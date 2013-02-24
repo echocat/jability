@@ -19,12 +19,16 @@ import org.echocat.jability.CapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
 
+@ThreadSafe
+@Immutable
 public class BaseCapabilityProvider<T extends Capability<?>> implements CapabilityProvider {
 
     private final Map<String, T> _idToCapability;

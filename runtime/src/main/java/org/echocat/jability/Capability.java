@@ -14,14 +14,13 @@
 
 package org.echocat.jability;
 
+import org.echocat.jability.support.IdUtils;
 import org.echocat.jability.value.Value;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
-
-import static org.echocat.jability.value.support.DefinitionIdUtils.buildCapabilityDefinitionIdFrom;
 
 public interface Capability<V> extends Value<V> {
 
@@ -34,7 +33,7 @@ public interface Capability<V> extends Value<V> {
         }
 
         public Impl(@Nonnull Class<? extends V> valueType, @Nonnull Class<?> basedOn, @Nonnull String subId, @Nullable V defaultValue) {
-            this(valueType, buildCapabilityDefinitionIdFrom(basedOn, subId), defaultValue);
+            this(valueType, IdUtils.buildIdFrom(basedOn, subId), defaultValue);
         }
 
         @Override

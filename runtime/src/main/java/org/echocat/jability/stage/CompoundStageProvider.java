@@ -19,6 +19,8 @@ import org.echocat.jomon.runtime.iterators.ChainedIterator;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -28,6 +30,8 @@ import static com.google.common.collect.Iterators.filter;
 import static org.echocat.jability.stage.Stages.unknown;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableSet;
 
+@ThreadSafe
+@Immutable
 public class CompoundStageProvider implements StageProvider {
 
     private final Iterable<StageProvider> _delegates;

@@ -32,13 +32,13 @@ public interface Value<V> {
 
     @ThreadSafe
     @Immutable
-    public abstract static class Impl<V> implements Value<V> {
+    public static class Impl<V> implements Value<V> {
 
         private final Class<? extends V> _valueType;
         private final String _id;
         private final V _defaultValue;
 
-        protected Impl(@Nonnull Class<? extends V> valueType, @Nonnull String id, @Nullable V defaultValue) {
+        public Impl(@Nonnull Class<? extends V> valueType, @Nonnull String id, @Nullable V defaultValue) {
             _valueType = valueType;
             _id = id;
             _defaultValue = defaultValue;

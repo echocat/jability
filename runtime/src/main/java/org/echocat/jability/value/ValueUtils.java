@@ -34,7 +34,7 @@ public class ValueUtils {
     }};
 
     @Nonnull
-    public static <T extends Value<?>> Comparator<T> valueDefinitionComparator() {
+    public static <T extends Value<?>> Comparator<T> valueComparator() {
         // noinspection unchecked
         return (Comparator<T>) ValueUtils.COMPARATOR;
     }

@@ -17,6 +17,7 @@ package org.echocat.jability.configuration.support;
 import org.echocat.jability.support.AccessType;
 import org.echocat.jomon.runtime.jaxb.PatternAdapter;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
@@ -28,6 +29,7 @@ import static org.apache.commons.lang3.StringUtils.join;
 import static org.apache.commons.lang3.StringUtils.split;
 import static org.echocat.jability.support.AccessType.valueOf;
 
+@NotThreadSafe
 public abstract class BaseReferenceConfiguration extends BaseConfiguration {
 
     private String _fromType;

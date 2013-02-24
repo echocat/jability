@@ -20,10 +20,14 @@ import org.echocat.jomon.runtime.util.Entry;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.util.Iterator;
 
 import static org.echocat.jomon.runtime.CollectionUtils.emptyIterator;
 
+@ThreadSafe
+@Immutable
 public class NoopCapabilities implements Capabilities {
 
     @Nullable

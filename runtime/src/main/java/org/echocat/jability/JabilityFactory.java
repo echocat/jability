@@ -20,6 +20,8 @@ import org.w3c.dom.Node;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.annotation.concurrent.Immutable;
+import javax.annotation.concurrent.ThreadSafe;
 import java.io.IOException;
 import java.io.Reader;
 import java.net.URL;
@@ -27,6 +29,8 @@ import java.net.URL;
 import static org.echocat.jability.configuration.ConfigurationMarshaller.findDefaultConfigurationLocation;
 import static org.echocat.jability.configuration.ConfigurationMarshaller.unmarshal;
 
+@ThreadSafe
+@Immutable
 public class JabilityFactory {
 
     @Nonnull

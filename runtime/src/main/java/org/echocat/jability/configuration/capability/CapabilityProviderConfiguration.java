@@ -16,9 +16,11 @@ package org.echocat.jability.configuration.capability;
 
 import org.echocat.jability.configuration.support.TypeBasedConfiguration;
 
+import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlType;
 
 import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 
 @XmlType(name = "capabilityProvider", namespace = SCHEMA_NAMESPACE)
+@NotThreadSafe
 public class CapabilityProviderConfiguration extends TypeBasedConfiguration implements UnderCapabilitiesRootConfiguration {}
