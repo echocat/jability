@@ -26,8 +26,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.ServiceLoader.load;
-import static org.echocat.jability.support.DiscoverUtils.createInstanceBy;
-import static org.echocat.jability.support.DiscoverUtils.selectClassLoader;
+import static org.echocat.jability.support.ClassUtils.createInstanceBy;
+import static org.echocat.jability.support.ClassUtils.selectClassLoader;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
 @ThreadSafe

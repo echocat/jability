@@ -17,7 +17,7 @@ package org.echocat.jability.configuration.support;
 import javax.annotation.concurrent.NotThreadSafe;
 import javax.xml.bind.annotation.XmlAttribute;
 
-import static org.echocat.jability.support.DiscoverUtils.nameOf;
+import static org.echocat.jability.support.ClassUtils.nameOf;
 
 @NotThreadSafe
 public abstract class IdBasedConfiguration extends BaseConfiguration {

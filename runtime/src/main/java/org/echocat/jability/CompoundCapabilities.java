@@ -14,6 +14,7 @@
 
 package org.echocat.jability;
 
+import com.google.common.base.Predicate;
 import org.echocat.jability.value.CompoundValues;
 import org.echocat.jomon.runtime.iterators.ChainedIterator;
 import org.echocat.jomon.runtime.util.Entry;
@@ -21,7 +22,11 @@ import org.echocat.jomon.runtime.util.Entry;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.ThreadSafe;
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
+
+import static com.google.common.collect.Iterators.filter;
 
 @ThreadSafe
 public class CompoundCapabilities extends CompoundValues<Capabilities> implements Capabilities {
@@ -106,13 +111,26 @@ public class CompoundCapabilities extends CompoundValues<Capabilities> implement
 
     @Override
     public Iterator<Entry<Capability<?>, Object>> iterator() {
+        final Set<Capability<?>> alreadyReturned = new HashSet<>();
         return new ChainedIterator<Capabilities, Entry<Capability<?>, Object>>(getDelegates()) {
             @Nullable
             @Override
             protected Iterator<Entry<Capability<?>, Object>> nextIterator(@Nullable Capabilities input) {
-                return input.iterator();
+                final Iterator<Entry<Capability<?>, Object>> i = input.iterator();
+                return i != null ? filter(i, new Predicate<Entry<Capability<?>, Object>>() {
+                    @Override
+                    public boolean apply(@Nullable Entry<Capability<?>, Object> input) {
+                        return alreadyReturned.add(input.getKey());
+                    }
+                }) : null;
             }
         };
+    }
+
+    @Nonnull
+    @Override
+    protected Iterable<Capabilities> getDelegates() {
+        return super.getDelegates();
     }
 
 }

@@ -21,6 +21,7 @@ import org.echocat.jability.configuration.stage.StageReferenceConfiguration;
 import org.echocat.jability.configuration.stage.StagesRootConfiguration;
 import org.echocat.jability.stage.Stage.Impl;
 import org.echocat.jability.stage.support.DefaultStageProvider;
+import org.echocat.jability.support.ClassUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -73,7 +74,7 @@ public class StageProviderFactory {
     @Nonnull
     public List<StageProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         final List<StageProvider> providers = new ArrayList<>();
-        final ClassLoader targetClassLoader = selectClassLoader(classLoader);
+        final ClassLoader targetClassLoader = ClassUtils.selectClassLoader(classLoader);
         addAll(providers, load(StageProvider.class, targetClassLoader));
         for (Class<?> currentType : discoverTypesOf(Stage.class, null, targetClassLoader)) {
             final Collection<Stage> stages = discoverStaticFieldValuesBy(Stage.class, currentType, null, null, PUBLIC);
@@ -102,7 +103,7 @@ public class StageProviderFactory {
         final List<StageProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (StageReferenceConfiguration configuration : configurations) {
-                final Class<?> type = loadClassBy(classLoader, configuration.getFromType());
+                final Class<?> type = ClassUtils.loadClassBy(classLoader, configuration.getFromType());
                 final Collection<Stage> stages = discoverStaticFieldValuesBy(Stage.class, type, null, configuration.getFromField(), configuration.getAccessTypes());
                 providers.add(new DefaultStageProvider<>(stages));
             }
@@ -116,7 +117,7 @@ public class StageProviderFactory {
         if (configurations != null) {
             for (StageProviderConfiguration configuration : configurations) {
                 final String typeName = configuration.getType();
-                providers.add(createInstanceBy(classLoader, typeName, StageProvider.class));
+                providers.add(ClassUtils.createInstanceBy(classLoader, typeName, StageProvider.class));
             }
         }
         return asImmutableList(providers);

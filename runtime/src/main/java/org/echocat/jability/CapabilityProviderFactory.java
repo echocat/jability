@@ -16,20 +16,23 @@ package org.echocat.jability;
 
 import org.echocat.jability.configuration.Configuration;
 import org.echocat.jability.configuration.capability.CapabilitiesRootConfiguration;
-import org.echocat.jability.configuration.capability.CapabilityReferenceConfiguration;
 import org.echocat.jability.configuration.capability.CapabilityProviderConfiguration;
-import org.echocat.jability.support.FieldBasedCapabilityProvider;
+import org.echocat.jability.configuration.capability.CapabilityReferenceConfiguration;
+import org.echocat.jability.support.ClassUtils;
+import org.echocat.jability.support.DefaultCapabilityProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.ServiceLoader.load;
 import static org.echocat.jability.support.AccessType.PUBLIC;
-import static org.echocat.jability.support.DiscoverUtils.*;
+import static org.echocat.jability.support.DiscoverUtils.discoverStaticFieldValuesBy;
+import static org.echocat.jability.support.DiscoverUtils.discoverTypesOf;
 import static org.echocat.jomon.runtime.CollectionUtils.addAll;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
@@ -63,11 +66,12 @@ public class CapabilityProviderFactory {
     @Nonnull
     public List<CapabilityProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         final List<CapabilityProvider> providers = new ArrayList<>();
-        final ClassLoader targetClassLoader = selectClassLoader(classLoader);
+        final ClassLoader targetClassLoader = ClassUtils.selectClassLoader(classLoader);
         addAll(providers, load(CapabilityProvider.class, targetClassLoader));
         for (Class<?> currentType : discoverTypesOf(Capability.class, null, targetClassLoader)) {
             // noinspection unchecked
-            providers.add(new FieldBasedCapabilityProvider(Capability.class, currentType, null, null, PUBLIC));
+            final Collection<Capability<?>> capabilities = (Collection<Capability<?>>) (Object) discoverStaticFieldValuesBy(Capability.class, currentType, null, null, PUBLIC);
+            providers.add(new DefaultCapabilityProvider<>(capabilities));
         }
         return asImmutableList(providers);
     }
@@ -77,7 +81,10 @@ public class CapabilityProviderFactory {
         final List<CapabilityProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (CapabilityReferenceConfiguration configuration : configurations) {
-                providers.add(new FieldBasedCapabilityProvider<>(classLoader, configuration));
+                final Class<?> fromType = ClassUtils.loadClassBy(classLoader, configuration.getFromType());
+                // noinspection unchecked
+                final Collection<Capability<?>> capabilities = (Collection<Capability<?>>) (Object) discoverStaticFieldValuesBy(Capability.class, fromType, null, configuration.getFromField(), configuration.getAccessTypes());
+                providers.add(new DefaultCapabilityProvider<>(capabilities));
             }
         }
         return asImmutableList(providers);
@@ -89,7 +96,7 @@ public class CapabilityProviderFactory {
         if (configurations != null) {
             for (CapabilityProviderConfiguration configuration : configurations) {
                 final String typeName = configuration.getType();
-                providers.add(createInstanceBy(classLoader, typeName, CapabilityProvider.class));
+                providers.add(ClassUtils.createInstanceBy(classLoader, typeName, CapabilityProvider.class));
             }
         }
         return asImmutableList(providers);

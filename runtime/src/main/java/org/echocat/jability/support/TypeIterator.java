@@ -21,6 +21,8 @@ import java.io.*;
 import java.net.URL;
 import java.util.*;
 
+import static org.echocat.jability.support.ClassUtils.selectClassLoader;
+
 @NotThreadSafe
 public class TypeIterator<T> implements Iterator<Class<? extends T>> {
 
@@ -34,16 +36,16 @@ public class TypeIterator<T> implements Iterator<Class<? extends T>> {
     private Boolean _hasNext;
     private Class<? extends T> _next;
 
-    public TypeIterator(@Nonnull Class<?> baseType, @Nullable Class<T> expectedType, @Nonnull ClassLoader classLoader) {
+    public TypeIterator(@Nonnull Class<?> baseType, @Nullable Class<T> expectedType, @Nullable ClassLoader classLoader) {
         _baseType = baseType;
-        _classLoader = classLoader;
+        _classLoader = selectClassLoader(classLoader);
         _expectedType = expectedType;
 
         final String fileName = "META-INF/types/" + baseType.getName();
         try {
-            _urls = classLoader.getResources(fileName);
+            _urls = _classLoader.getResources(fileName);
         } catch (IOException e) {
-            throw new RuntimeException("Could not load files '" + fileName + "' from classpath by " + classLoader + ".", e);
+            throw new RuntimeException("Could not load files '" + fileName + "' from classpath by " + _classLoader + ".", e);
         }
     }
 
@@ -62,10 +64,10 @@ public class TypeIterator<T> implements Iterator<Class<? extends T>> {
                                 try {
                                     plainClass = _classLoader.loadClass(trimmedLine);
                                 } catch (ClassNotFoundException e) {
-                                    throw new RuntimeException("Could not find a class named " + trimmedLine + " defined in " + url + ".", e);
+                                    throw new IllegalStateException("Could not find a class named " + trimmedLine + " defined in " + url + ".", e);
                                 }
                                 if (_expectedType != null && !_expectedType.isAssignableFrom(plainClass)) {
-                                    throw new RuntimeException("Class named " + trimmedLine + " defined in " + url + " is not of expected type " + _expectedType.getName() + ".");
+                                    throw new IllegalStateException("Class named " + trimmedLine + " defined in " + url + " is not of expected type " + _expectedType.getName() + ".");
                                 }
                                 // noinspection unchecked
                                 types.add((Class<? extends T>) plainClass);

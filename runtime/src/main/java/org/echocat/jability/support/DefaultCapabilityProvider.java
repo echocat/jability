@@ -29,11 +29,11 @@ import static java.util.Collections.unmodifiableMap;
 
 @ThreadSafe
 @Immutable
-public class BaseCapabilityProvider<T extends Capability<?>> implements CapabilityProvider {
+public class DefaultCapabilityProvider<T extends Capability<?>> implements CapabilityProvider {
 
     private final Map<String, T> _idToCapability;
 
-    public BaseCapabilityProvider(@Nullable Iterable<T> definitions) {
+    public DefaultCapabilityProvider(@Nullable Iterable<T> definitions) {
         _idToCapability = toIdToStage(definitions);
     }
 

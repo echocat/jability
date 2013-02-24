@@ -44,6 +44,10 @@ public enum AccessType {
         return matches(field.getModifiers());
     }
 
+    public static boolean matches(@Nonnull Field field, @Nullable AccessType... accessTypes) {
+        return matches(field, accessTypes != null ? asImmutableList(accessTypes) : null);
+    }
+
     public static boolean matches(@Nonnull Field field, @Nullable Collection<AccessType> accessTypes) {
         final Collection<AccessType> targetAccessTypes = accessTypes != null && !accessTypes.isEmpty() ? accessTypes : DEFAULT_ACCESS_TYPES;
         boolean result = false;

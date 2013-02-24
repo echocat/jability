@@ -19,6 +19,7 @@ import org.echocat.jability.configuration.property.PropertiesRootConfiguration;
 import org.echocat.jability.configuration.property.PropertyProviderConfiguration;
 import org.echocat.jability.configuration.property.PropertyReferenceConfiguration;
 import org.echocat.jability.property.support.DefaultPropertyProvider;
+import org.echocat.jability.support.ClassUtils;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,7 +65,7 @@ public class PropertyProviderFactory {
     @Nonnull
     public List<PropertyProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         final List<PropertyProvider> providers = new ArrayList<>();
-        final ClassLoader targetClassLoader = selectClassLoader(classLoader);
+        final ClassLoader targetClassLoader = ClassUtils.selectClassLoader(classLoader);
         addAll(providers, load(PropertyProvider.class, targetClassLoader));
         for (Class<?> currentType : discoverTypesOf(Property.class, null, targetClassLoader)) {
             providers.add(getPropertyProviderBy(currentType));
@@ -96,7 +97,7 @@ public class PropertyProviderFactory {
 
     @Nonnull
     protected Collection<Property<?>> getPropertiesBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
-        final Class<?> startFrom = loadClassBy(classLoader, configuration.getFromType());
+        final Class<?> startFrom = ClassUtils.loadClassBy(classLoader, configuration.getFromType());
         //noinspection rawtypes,unchecked
         return (Collection<Property<?>>) (Collection) discoverStaticFieldValuesBy(Property.class, startFrom, null, configuration.getFromField(), configuration.getAccessTypes());
     }
@@ -112,7 +113,7 @@ public class PropertyProviderFactory {
         if (configurations != null) {
             for (PropertyProviderConfiguration configuration : configurations) {
                 final String typeName = configuration.getType();
-                providers.add(createInstanceBy(classLoader, typeName, PropertyProvider.class));
+                providers.add(ClassUtils.createInstanceBy(classLoader, typeName, PropertyProvider.class));
             }
         }
         return asImmutableList(providers);

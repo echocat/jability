@@ -41,4 +41,10 @@ public class CompoundCapabilityProvider extends CompoundValueProvider<Capability
         return (Capability<V>) super.provideBy(valueType, id);
     }
 
+    @Nonnull
+    @Override
+    protected Iterable<CapabilityProvider> getDelegates() {
+        return super.getDelegates();
+    }
+
 }

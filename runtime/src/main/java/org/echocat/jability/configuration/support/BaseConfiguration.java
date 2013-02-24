@@ -23,7 +23,7 @@ import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
 import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.apache.commons.lang3.builder.ToStringBuilder.reflectionToString;
 import static org.apache.commons.lang3.builder.ToStringStyle.SHORT_PREFIX_STYLE;
-import static org.echocat.jability.support.DiscoverUtils.nameOf;
+import static org.echocat.jability.support.ClassUtils.nameOf;
 
 public abstract class BaseConfiguration {
 
