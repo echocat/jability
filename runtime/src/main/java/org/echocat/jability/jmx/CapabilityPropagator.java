@@ -19,7 +19,6 @@ import org.echocat.jability.Jability;
 import org.echocat.jomon.runtime.util.Duration;
 
 import javax.annotation.Nonnull;
-import javax.annotation.concurrent.Immutable;
 import javax.annotation.concurrent.ThreadSafe;
 import javax.management.*;
 import java.util.HashSet;
@@ -30,8 +29,7 @@ import static java.lang.management.ManagementFactory.getPlatformMBeanServer;
 import static org.echocat.jomon.runtime.concurrent.ThreadUtils.stop;
 
 @ThreadSafe
-@Immutable
-public class CapabilityPropagater implements AutoCloseable {
+public class CapabilityPropagator implements AutoCloseable {
 
     private final MBeanServer _server;
     private final Jability _jability;
@@ -39,16 +37,16 @@ public class CapabilityPropagater implements AutoCloseable {
     private final Refresher _refresher = new Refresher();
     private final Set<Capability<?>> _knownCapabilities = new HashSet<>();
 
-    private Duration _indexRefreshDuration = new Duration("10s");
+    private volatile Duration _indexRefreshDuration = new Duration("10s");
 
-    public CapabilityPropagater(@Nonnull MBeanServer server, @Nonnull Jability jability) {
+    public CapabilityPropagator(@Nonnull MBeanServer server, @Nonnull Jability jability) {
         _server = server;
         _jability = jability;
         refresh();
         _refresher.start();
     }
 
-    public CapabilityPropagater(@Nonnull Jability jability) {
+    public CapabilityPropagator(@Nonnull Jability jability) {
         this(getPlatformMBeanServer(), jability);
     }
 
@@ -146,7 +144,7 @@ public class CapabilityPropagater implements AutoCloseable {
     protected class Refresher extends Thread {
 
         public Refresher() {
-            super(CapabilityPropagater.this.getClass().getSimpleName() + ".Refresher");
+            super(CapabilityPropagator.this.getClass().getSimpleName() + ".Refresher");
         }
 
         @Override

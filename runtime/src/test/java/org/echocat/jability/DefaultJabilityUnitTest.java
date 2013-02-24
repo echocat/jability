@@ -14,7 +14,7 @@
 
 package org.echocat.jability;
 
-import org.echocat.jability.jmx.CapabilityPropagater;
+import org.echocat.jability.jmx.CapabilityPropagator;
 import org.echocat.jability.property.CompoundProperties;
 import org.echocat.jability.property.CompoundPropertyProvider;
 import org.echocat.jability.property.support.NoopProperties;
@@ -41,7 +41,7 @@ public class DefaultJabilityUnitTest {
             assertThat(jability.getProperties(), isInstanceOf(NoopProperties.class));
             assertThat(jability.getPropertyProvider(), isInstanceOf(NoopPropertyProvider.class));
             assertThat(jability.getStageProvider(), isInstanceOf(NoopStageProvider.class));
-            assertThat(jability.getCapabilityPropagater(), is(null));
+            assertThat(jability.getCapabilityPropagator(), is(null));
         }
     }
 
@@ -54,35 +54,35 @@ public class DefaultJabilityUnitTest {
             assertThat(jability.getProperties(), isInstanceOf(CompoundProperties.class));
             assertThat(jability.getPropertyProvider(), isInstanceOf(CompoundPropertyProvider.class));
             assertThat(jability.getStageProvider(), isInstanceOf(CompoundStageProvider.class));
-            assertThat(jability.getCapabilityPropagater(), isInstanceOf(CapabilityPropagater.class));
+            assertThat(jability.getCapabilityPropagator(), isInstanceOf(CapabilityPropagator.class));
         }
     }
 
     @Test
-    public void testRightCloseOfPropergaterIfSet() throws Exception {
+    public void testRightCloseOfPropagatorIfSet() throws Exception {
         try (final DefaultJability jability = new DefaultJability()) {
-            final CapabilityPropagater propagater = mock(CapabilityPropagater.class);
-            jability.setCapabilityPropagater(propagater);
-            verify(propagater, times(0)).close();
+            final CapabilityPropagator propagator = mock(CapabilityPropagator.class);
+            jability.setCapabilityPropagator(propagator);
+            verify(propagator, times(0)).close();
             jability.close();
-            verify(propagater, times(1)).close();
+            verify(propagator, times(1)).close();
         }
     }
 
     @Test
-    public void testRightCloseOfPropergaterIfSetOnManualSetOfPropagater() throws Exception {
+    public void testRightCloseOfPropagatorIfSetOnManualSetOfPropagator() throws Exception {
         try (final DefaultJability jability = new DefaultJability()) {
-            final CapabilityPropagater propagaterA = mock(CapabilityPropagater.class);
-            final CapabilityPropagater propagaterB = mock(CapabilityPropagater.class);
-            jability.setCapabilityPropagater(propagaterA);
-            verify(propagaterA, times(0)).close();
-            verify(propagaterB, times(0)).close();
-            jability.setCapabilityPropagater(propagaterA);
-            verify(propagaterA, times(0)).close();
-            verify(propagaterB, times(0)).close();
-            jability.setCapabilityPropagater(propagaterB);
-            verify(propagaterA, times(1)).close();
-            verify(propagaterB, times(0)).close();
+            final CapabilityPropagator propagatorA = mock(CapabilityPropagator.class);
+            final CapabilityPropagator propagatorB = mock(CapabilityPropagator.class);
+            jability.setCapabilityPropagator(propagatorA);
+            verify(propagatorA, times(0)).close();
+            verify(propagatorB, times(0)).close();
+            jability.setCapabilityPropagator(propagatorA);
+            verify(propagatorA, times(0)).close();
+            verify(propagatorB, times(0)).close();
+            jability.setCapabilityPropagator(propagatorB);
+            verify(propagatorA, times(1)).close();
+            verify(propagatorB, times(0)).close();
         }
     }
 

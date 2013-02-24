@@ -15,8 +15,8 @@
 package org.echocat.jability;
 
 import org.echocat.jability.configuration.Configuration;
-import org.echocat.jability.jmx.CapabilityPropagater;
-import org.echocat.jability.jmx.CapabilityPropagaterFactory;
+import org.echocat.jability.jmx.CapabilityPropagator;
+import org.echocat.jability.jmx.CapabilityPropagatorFactory;
 import org.echocat.jability.property.Properties;
 import org.echocat.jability.property.PropertiesFactory;
 import org.echocat.jability.property.PropertyProvider;
@@ -43,7 +43,7 @@ public class DefaultJability implements LoadEnabledJability {
     private volatile StageProvider _stageProvider = new NoopStageProvider();
     private volatile PropertyProvider _propertyProvider = new NoopPropertyProvider();
     private volatile Properties _properties = new NoopProperties();
-    private volatile CapabilityPropagater _capabilityPropagater;
+    private volatile CapabilityPropagator _capabilityPropagator;
 
     @Override
     public void load(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
@@ -53,7 +53,7 @@ public class DefaultJability implements LoadEnabledJability {
             setStageProvider(loadStageProviderBy(classLoader, configuration));
             setPropertyProvider(loadPropertyProviderBy(classLoader, configuration));
             setProperties(loadPropertiesBy(classLoader, configuration));
-            setCapabilityPropagater(loadCapabilityProviderIfPossibleBy(configuration));
+            setCapabilityPropagator(loadCapabilityProviderIfPossibleBy(configuration));
         }
     }
 
@@ -83,8 +83,8 @@ public class DefaultJability implements LoadEnabledJability {
     }
 
     @Nullable
-    protected CapabilityPropagater loadCapabilityProviderIfPossibleBy(@Nullable Configuration configuration) {
-        return new CapabilityPropagaterFactory().createIfPossibleBy(this, configuration);
+    protected CapabilityPropagator loadCapabilityProviderIfPossibleBy(@Nullable Configuration configuration) {
+        return new CapabilityPropagatorFactory().createIfPossibleBy(this, configuration);
     }
 
     @Override
@@ -147,17 +147,17 @@ public class DefaultJability implements LoadEnabledJability {
         }
     }
 
-    public CapabilityPropagater getCapabilityPropagater() {
-        return _capabilityPropagater;
+    public CapabilityPropagator getCapabilityPropagator() {
+        return _capabilityPropagator;
     }
 
-    public void setCapabilityPropagater(CapabilityPropagater capabilityPropagater) {
+    public void setCapabilityPropagator(CapabilityPropagator capabilityPropagator) {
         synchronized (this) {
             // noinspection ObjectEquality
-            if (_capabilityPropagater != null && capabilityPropagater != _capabilityPropagater) {
-                closeQuietly(_capabilityPropagater);
+            if (_capabilityPropagator != null && capabilityPropagator != _capabilityPropagator) {
+                closeQuietly(_capabilityPropagator);
             }
-            _capabilityPropagater = capabilityPropagater;
+            _capabilityPropagator = capabilityPropagator;
         }
     }
 
@@ -165,9 +165,9 @@ public class DefaultJability implements LoadEnabledJability {
     public void close() throws Exception {
         synchronized (this) {
             try {
-                closeQuietly(_capabilityPropagater);
+                closeQuietly(_capabilityPropagator);
             } finally {
-                _capabilityPropagater = null;
+                _capabilityPropagator = null;
             }
         }
     }

@@ -27,16 +27,16 @@ import static org.echocat.jability.configuration.jmx.JmxRootConfiguration.isAuto
 
 @ThreadSafe
 @Immutable
-public class CapabilityPropagaterFactory {
+public class CapabilityPropagatorFactory {
 
     @Nullable
-    public CapabilityPropagater createIfPossibleBy(@Nonnull Jability jability, @Nullable Configuration configuration) {
+    public CapabilityPropagator createIfPossibleBy(@Nonnull Jability jability, @Nullable Configuration configuration) {
         return createIfPossibleBy(jability, configuration != null ? configuration.getJmx() : null);
     }
 
     @Nullable
-    public CapabilityPropagater createIfPossibleBy(@Nonnull Jability jability, @Nullable JmxRootConfiguration configuration) {
-        return isAutoPropagateEnabledBasedOn(configuration) ? new CapabilityPropagater(jability) : null;
+    public CapabilityPropagator createIfPossibleBy(@Nonnull Jability jability, @Nullable JmxRootConfiguration configuration) {
+        return isAutoPropagateEnabledBasedOn(configuration) ? new CapabilityPropagator(jability) : null;
     }
 
 }
