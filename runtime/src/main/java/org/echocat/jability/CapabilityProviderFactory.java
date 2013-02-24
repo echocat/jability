@@ -34,17 +34,17 @@ import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 public class CapabilityProviderFactory {
 
     @Nonnull
-    public static CapabilityProvider createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
+    public CapabilityProvider createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
         return createBy(classLoader, configuration != null ? configuration.getCapabilities() : null);
     }
 
     @Nonnull
-    public static CapabilityProvider createBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
+    public CapabilityProvider createBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
         return new CompoundCapabilityProvider(createAllBy(classLoader, configuration));
     }
 
     @Nonnull
-    public static List<CapabilityProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
+    public List<CapabilityProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
         final List<CapabilityProvider> providers = new ArrayList<>();
         if (configuration != null) {
             providers.addAll(createAllReferencedBy(classLoader, configuration.getReferences()));
@@ -57,7 +57,7 @@ public class CapabilityProviderFactory {
     }
 
     @Nonnull
-    public static List<CapabilityProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
+    public List<CapabilityProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         final List<CapabilityProvider> providers = new ArrayList<>();
         final ClassLoader targetClassLoader = selectClassLoader(classLoader);
         addAll(providers, load(CapabilityProvider.class, targetClassLoader));
@@ -69,7 +69,7 @@ public class CapabilityProviderFactory {
     }
 
     @Nonnull
-    public static List<CapabilityProvider> createAllReferencedBy(@Nullable ClassLoader classLoader, @Nullable Iterable<CapabilityReferenceConfiguration> configurations) {
+    public List<CapabilityProvider> createAllReferencedBy(@Nullable ClassLoader classLoader, @Nullable Iterable<CapabilityReferenceConfiguration> configurations) {
         final List<CapabilityProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (CapabilityReferenceConfiguration configuration : configurations) {
@@ -80,7 +80,7 @@ public class CapabilityProviderFactory {
     }
 
     @Nonnull
-    public static List<CapabilityProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<CapabilityProviderConfiguration> configurations) {
+    public List<CapabilityProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<CapabilityProviderConfiguration> configurations) {
         final List<CapabilityProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (CapabilityProviderConfiguration configuration : configurations) {
@@ -90,7 +90,5 @@ public class CapabilityProviderFactory {
         }
         return asImmutableList(providers);
     }
-
-    private CapabilityProviderFactory() {}
 
 }

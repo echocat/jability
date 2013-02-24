@@ -40,4 +40,6 @@ public class ValueUtils {
     }
 
     private ValueUtils() {}
+    protected static final ValueUtils INSTANCE = new ValueUtils();
+
 }

@@ -112,4 +112,5 @@ public class TypeIterator<T> implements Iterator<Class<? extends T>> {
     public void remove() {
         throw new UnsupportedOperationException();
     }
+
 }

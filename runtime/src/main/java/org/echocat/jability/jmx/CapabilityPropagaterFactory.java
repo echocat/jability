@@ -26,15 +26,13 @@ import static org.echocat.jability.configuration.jmx.JmxRootConfiguration.isAuto
 public class CapabilityPropagaterFactory {
 
     @Nullable
-    public static CapabilityPropagater createIfPossibleBy(@Nonnull Jability jability, @Nullable Configuration configuration) {
+    public CapabilityPropagater createIfPossibleBy(@Nonnull Jability jability, @Nullable Configuration configuration) {
         return createIfPossibleBy(jability, configuration != null ? configuration.getJmx() : null);
     }
 
     @Nullable
-    public static CapabilityPropagater createIfPossibleBy(@Nonnull Jability jability, @Nullable JmxRootConfiguration configuration) {
+    public CapabilityPropagater createIfPossibleBy(@Nonnull Jability jability, @Nullable JmxRootConfiguration configuration) {
         return isAutoPropagateEnabledBasedOn(configuration) ? new CapabilityPropagater(jability) : null;
     }
-
-    private CapabilityPropagaterFactory() {}
 
 }

@@ -43,6 +43,7 @@ public class CapabilityUtils {
     }
 
     private CapabilityUtils() {}
+    protected static final CapabilityUtils INSTANCE = new CapabilityUtils();
 
 
 }

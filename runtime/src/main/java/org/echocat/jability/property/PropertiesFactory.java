@@ -31,17 +31,17 @@ import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 public class PropertiesFactory {
 
     @Nonnull
-    public static Properties createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
+    public Properties createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
         return createBy(classLoader, configuration != null ? configuration.getProperties() : null);
     }
 
     @Nonnull
-    public static Properties createBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
+    public Properties createBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
         return new CompoundProperties(createAllBy(classLoader, configuration));
     }
 
     @Nonnull
-    public static List<Properties> createAllBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
+    public List<Properties> createAllBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
         final List<Properties> allProperties = new ArrayList<>();
         if (configuration != null) {
             allProperties.addAll(createAllBy(classLoader, configuration.getProperties()));
@@ -53,12 +53,12 @@ public class PropertiesFactory {
     }
 
     @Nonnull
-    public static List<Properties> createAllSystemsBy(@Nullable ClassLoader classLoader) {
+    public List<Properties> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         return asImmutableList(load(Properties.class, selectClassLoader(classLoader)));
     }
 
     @Nonnull
-    public static List<Properties> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<PropertiesConfiguration> configurations) {
+    public List<Properties> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<PropertiesConfiguration> configurations) {
         final List<Properties> allProperties = new ArrayList<>();
         if (configurations != null) {
             for (PropertiesConfiguration configuration : configurations) {
@@ -68,7 +68,5 @@ public class PropertiesFactory {
         }
         return asImmutableList(allProperties);
     }
-
-    private PropertiesFactory() {}
 
 }

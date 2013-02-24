@@ -127,4 +127,9 @@ public class CompoundProperties extends CompoundValues<Properties> implements Pr
         };
     }
 
+    @Nonnull
+    @Override
+    protected Iterable<Properties> getDelegates() {
+        return super.getDelegates();
+    }
 }

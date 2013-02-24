@@ -61,4 +61,9 @@ public abstract class CompoundValueProvider<V extends Value<?>, P extends ValueP
         }};
     }
 
+    @Nonnull
+    protected Iterable<P> getDelegates() {
+        return _delegates;
+    }
+
 }

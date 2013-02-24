@@ -59,32 +59,32 @@ public class DefaultJability implements LoadEnabledJability {
 
     @Nonnull
     protected CapabilityProvider createCapabilityProviderBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
-        return CapabilityProviderFactory.createBy(classLoader, configuration);
+        return new CapabilityProviderFactory().createBy(classLoader, configuration);
     }
 
     @Nonnull
     protected Capabilities createCapabilitiesBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
-        return CapabilitiesFactory.createBy(classLoader, configuration);
+        return new CapabilitiesFactory().createBy(classLoader, configuration);
     }
 
     @Nonnull
     protected StageProvider createStageProviderBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
-        return StageProviderFactory.createBy(classLoader, configuration);
+        return new StageProviderFactory().createBy(classLoader, configuration);
     }
 
     @Nonnull
     protected PropertyProvider createPropertyProviderBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
-        return PropertyProviderFactory.createBy(classLoader, configuration);
+        return new PropertyProviderFactory().createBy(classLoader, configuration);
     }
 
     @Nonnull
     protected Properties createPropertiesBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
-        return PropertiesFactory.createBy(classLoader, configuration);
+        return new PropertiesFactory().createBy(classLoader, configuration);
     }
 
     @Nullable
     protected CapabilityPropagater createCapabilityProviderIfPossibleBy(@Nullable Configuration configuration) {
-        return CapabilityPropagaterFactory.createIfPossibleBy(this, configuration);
+        return new CapabilityPropagaterFactory().createIfPossibleBy(this, configuration);
     }
 
     @Override

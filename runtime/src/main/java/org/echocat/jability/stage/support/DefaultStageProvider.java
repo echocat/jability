@@ -24,23 +24,26 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import static java.util.Collections.unmodifiableMap;
+import static org.echocat.jability.stage.Stages.unknown;
 
-public class BaseStageProvider<T extends Stage> implements StageProvider {
+public class DefaultStageProvider<T extends Stage> implements StageProvider {
 
     private final Map<String, T> _idToStage;
 
-    public BaseStageProvider(@Nullable Iterable<T> stages) {
+    public DefaultStageProvider(@Nullable Iterable<T> stages) {
         _idToStage = toIdToStage(stages);
     }
 
     @Override
+    @Nullable
     public Stage provideBy(@Nonnull String id) {
         return _idToStage.get(id);
     }
 
     @Override
+    @Nonnull
     public Stage provideCurrent() {
-        return null;
+        return unknown;
     }
 
     @Override
@@ -59,4 +62,5 @@ public class BaseStageProvider<T extends Stage> implements StageProvider {
         }
         return unmodifiableMap(result);
     }
+
 }

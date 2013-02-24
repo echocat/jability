@@ -34,4 +34,6 @@ public class DefinitionIdUtils {
     }
 
     private DefinitionIdUtils() {}
+    protected static final DefinitionIdUtils INSTANCE = new DefinitionIdUtils();
+
 }

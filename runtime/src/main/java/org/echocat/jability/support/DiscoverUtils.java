@@ -31,8 +31,6 @@ import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 public class DiscoverUtils {
 
-    private DiscoverUtils() {}
-
     @Nonnull
     public static ClassLoader selectClassLoader(@Nullable ClassLoader classLoader) {
         return classLoader != null ? classLoader : currentThread().getContextClassLoader();
@@ -136,5 +134,8 @@ public class DiscoverUtils {
         final XmlType xmlType = type.getAnnotation(XmlType.class);
         return xmlType != null && !"##default".equals(xmlType.name()) ? xmlType.name() : type.getSimpleName();
     }
+
+    private DiscoverUtils() {}
+    protected static final DiscoverUtils INSTANCE = new DiscoverUtils();
 
 }

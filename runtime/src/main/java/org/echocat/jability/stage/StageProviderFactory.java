@@ -16,16 +16,16 @@ package org.echocat.jability.stage;
 
 import org.echocat.jability.configuration.Configuration;
 import org.echocat.jability.configuration.stage.StageConfiguration;
-import org.echocat.jability.configuration.stage.StageReferenceConfiguration;
 import org.echocat.jability.configuration.stage.StageProviderConfiguration;
+import org.echocat.jability.configuration.stage.StageReferenceConfiguration;
 import org.echocat.jability.configuration.stage.StagesRootConfiguration;
 import org.echocat.jability.stage.Stage.Impl;
-import org.echocat.jability.stage.support.BaseStageProvider;
-import org.echocat.jability.stage.support.FieldBasedStageProvider;
+import org.echocat.jability.stage.support.DefaultStageProvider;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import static java.util.ServiceLoader.load;
@@ -33,18 +33,19 @@ import static org.echocat.jability.configuration.stage.StagesRootConfiguration.g
 import static org.echocat.jability.configuration.stage.StagesRootConfiguration.getCurrentStageIdBasedOn;
 import static org.echocat.jability.support.AccessType.PUBLIC;
 import static org.echocat.jability.support.DiscoverUtils.*;
+import static org.echocat.jability.support.DiscoverUtils.discoverStaticFieldValuesBy;
 import static org.echocat.jomon.runtime.CollectionUtils.addAll;
 import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 
 public class StageProviderFactory {
 
     @Nonnull
-    public static StageProvider createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
+    public StageProvider createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
         return createBy(classLoader, configuration != null ? configuration.getStages() : null);
     }
 
     @Nonnull
-    public static StageProvider createBy(@Nullable ClassLoader classLoader, @Nullable StagesRootConfiguration configuration) {
+    public StageProvider createBy(@Nullable ClassLoader classLoader, @Nullable StagesRootConfiguration configuration) {
         final List<StageProvider> delegates = createAllBy(classLoader, configuration);
         final String currentId = getCurrentStageIdBasedOn(configuration);
         final Iterable<String> availableStages = getAvailableStageIdsBasedOn(configuration);
@@ -52,7 +53,7 @@ public class StageProviderFactory {
     }
 
     @Nonnull
-    public static List<StageProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable StagesRootConfiguration configuration) {
+    public List<StageProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable StagesRootConfiguration configuration) {
         final List<StageProvider> providers = new ArrayList<>();
         if (configuration != null) {
             providers.addAll(createAllSpecificBy(configuration.getStages()));
@@ -66,19 +67,19 @@ public class StageProviderFactory {
     }
 
     @Nonnull
-    public static List<StageProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
+    public List<StageProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         final List<StageProvider> providers = new ArrayList<>();
         final ClassLoader targetClassLoader = selectClassLoader(classLoader);
         addAll(providers, load(StageProvider.class, targetClassLoader));
         for (Class<?> currentType : discoverTypesOf(Stage.class, null, targetClassLoader)) {
-            // noinspection unchecked
-            providers.add(new FieldBasedStageProvider(Stage.class, currentType, null, null, PUBLIC));
+            final Collection<Stage> stages = discoverStaticFieldValuesBy(Stage.class, currentType, null, null, PUBLIC);
+            providers.add(new DefaultStageProvider<>(stages));
         }
         return asImmutableList(providers);
     }
 
     @Nonnull
-    public static List<StageProvider> createAllSpecificBy(@Nullable Iterable<StageConfiguration> configurations) {
+    public List<StageProvider> createAllSpecificBy(@Nullable Iterable<StageConfiguration> configurations) {
         final List<Stage> stages = new ArrayList<>();
         if (configurations != null) {
             for (StageConfiguration configuration : configurations) {
@@ -87,24 +88,26 @@ public class StageProviderFactory {
         }
         final List<StageProvider> providers = new ArrayList<>();
         if (!stages.isEmpty()) {
-            providers.add(new BaseStageProvider<>(stages));
+            providers.add(new DefaultStageProvider<>(stages));
         }
         return asImmutableList(providers);
     }
 
     @Nonnull
-    public static List<StageProvider> createAllReferencedBy(@Nullable ClassLoader classLoader, @Nullable Iterable<StageReferenceConfiguration> configurations) {
+    public List<StageProvider> createAllReferencedBy(@Nullable ClassLoader classLoader, @Nullable Iterable<StageReferenceConfiguration> configurations) {
         final List<StageProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (StageReferenceConfiguration configuration : configurations) {
-                providers.add(new FieldBasedStageProvider<>(classLoader, configuration));
+                final Class<?> type = loadClassBy(classLoader, configuration.getFromType());
+                final Collection<Stage> stages = discoverStaticFieldValuesBy(Stage.class, type, null, configuration.getFromField(), configuration.getAccessTypes());
+                providers.add(new DefaultStageProvider<>(stages));
             }
         }
         return asImmutableList(providers);
     }
 
     @Nonnull
-    public static List<StageProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<StageProviderConfiguration> configurations) {
+    public List<StageProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<StageProviderConfiguration> configurations) {
         final List<StageProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (StageProviderConfiguration configuration : configurations) {
@@ -114,7 +117,5 @@ public class StageProviderFactory {
         }
         return asImmutableList(providers);
     }
-
-    private StageProviderFactory() {}
 
 }

@@ -192,5 +192,6 @@ public class DirectJability {
     }
 
     private DirectJability() {}
+    protected static final DirectJability INSTANCE = new DirectJability();
 
 }

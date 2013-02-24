@@ -153,8 +153,6 @@ public class Configurations {
         return propagateToJmx(true);
     }
 
-    private Configurations() {}
-
     @Nonnull
     public static RespectSystemProperties respectSystemProperties(boolean respect) {
         return new RespectSystemProperties(respect);
@@ -308,5 +306,8 @@ public class Configurations {
         configuration.setType(type);
         return configuration;
     }
+
+    private Configurations() {}
+    protected static final Configurations INSTANCE = new Configurations();
 
 }

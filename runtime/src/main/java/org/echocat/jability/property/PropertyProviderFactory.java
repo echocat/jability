@@ -35,17 +35,17 @@ import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 public class PropertyProviderFactory {
 
     @Nonnull
-    public static PropertyProvider createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
+    public PropertyProvider createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
         return createBy(classLoader, configuration != null ? configuration.getProperties() : null);
     }
 
     @Nonnull
-    public static PropertyProvider createBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
+    public PropertyProvider createBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
         return new CompoundPropertyProvider(createAllBy(classLoader, configuration));
     }
 
     @Nonnull
-    public static List<PropertyProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
+    public List<PropertyProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable PropertiesRootConfiguration configuration) {
         final List<PropertyProvider> providers = new ArrayList<>();
         if (configuration != null) {
             providers.addAll(createAllReferencedBy(classLoader, configuration.getReferences()));
@@ -58,7 +58,7 @@ public class PropertyProviderFactory {
     }
 
     @Nonnull
-    public static List<PropertyProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
+    public List<PropertyProvider> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         final List<PropertyProvider> providers = new ArrayList<>();
         final ClassLoader targetClassLoader = selectClassLoader(classLoader);
         addAll(providers, load(PropertyProvider.class, targetClassLoader));
@@ -69,7 +69,7 @@ public class PropertyProviderFactory {
     }
 
     @Nonnull
-    public static List<PropertyProvider> createAllReferencedBy(@Nullable ClassLoader classLoader, @Nullable Iterable<PropertyReferenceConfiguration> configurations) {
+    public List<PropertyProvider> createAllReferencedBy(@Nullable ClassLoader classLoader, @Nullable Iterable<PropertyReferenceConfiguration> configurations) {
         final List<PropertyProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (PropertyReferenceConfiguration configuration : configurations) {
@@ -80,30 +80,30 @@ public class PropertyProviderFactory {
     }
 
     @Nonnull
-    protected static Collection<Property<?>> getPropertiesBy(@Nonnull Class<?> type) {
+    protected Collection<Property<?>> getPropertiesBy(@Nonnull Class<?> type) {
         //noinspection rawtypes,unchecked
         return (Collection<Property<?>>) (Collection) discoverStaticFieldValuesBy(Property.class, type, null, null, PUBLIC);
     }
 
     @Nonnull
-    protected static PropertyProvider getPropertyProviderBy(@Nonnull Class<?> type) {
+    protected PropertyProvider getPropertyProviderBy(@Nonnull Class<?> type) {
         return new DefaultPropertyProvider<>(getPropertiesBy(type));
     }
 
     @Nonnull
-    protected static Collection<Property<?>> getPropertiesBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
+    protected Collection<Property<?>> getPropertiesBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
         final Class<?> startFrom = loadClassBy(classLoader, configuration.getFromType());
         //noinspection rawtypes,unchecked
         return (Collection<Property<?>>) (Collection) discoverStaticFieldValuesBy(Property.class, startFrom, null, configuration.getFromField(), configuration.getAccessTypes());
     }
 
     @Nonnull
-    protected static PropertyProvider getPropertyProviderBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
+    protected PropertyProvider getPropertyProviderBy(@Nullable ClassLoader classLoader, @Nonnull PropertyReferenceConfiguration configuration) {
         return new DefaultPropertyProvider<>(getPropertiesBy(classLoader, configuration));
     }
 
     @Nonnull
-    public static List<PropertyProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<PropertyProviderConfiguration> configurations) {
+    public List<PropertyProvider> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<PropertyProviderConfiguration> configurations) {
         final List<PropertyProvider> providers = new ArrayList<>();
         if (configurations != null) {
             for (PropertyProviderConfiguration configuration : configurations) {
@@ -113,7 +113,5 @@ public class PropertyProviderFactory {
         }
         return asImmutableList(providers);
     }
-
-    private PropertyProviderFactory() {}
 
 }

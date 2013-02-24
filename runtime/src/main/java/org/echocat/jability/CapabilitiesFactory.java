@@ -31,17 +31,17 @@ import static org.echocat.jomon.runtime.CollectionUtils.asImmutableList;
 public class CapabilitiesFactory {
 
     @Nonnull
-    public static Capabilities createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
+    public Capabilities createBy(@Nullable ClassLoader classLoader, @Nullable Configuration configuration) {
         return createBy(classLoader, configuration != null ? configuration.getCapabilities() : null);
     }
 
     @Nonnull
-    public static Capabilities createBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
+    public Capabilities createBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
         return new CompoundCapabilities(createAllBy(classLoader, configuration));
     }
 
     @Nonnull
-    public static List<Capabilities> createAllBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
+    public List<Capabilities> createAllBy(@Nullable ClassLoader classLoader, @Nullable CapabilitiesRootConfiguration configuration) {
         final List<Capabilities> allCapabilities = new ArrayList<>();
         if (configuration != null) {
             allCapabilities.addAll(createAllBy(classLoader, configuration.getCapabilities()));
@@ -53,12 +53,12 @@ public class CapabilitiesFactory {
     }
 
     @Nonnull
-    public static List<Capabilities> createAllSystemsBy(@Nullable ClassLoader classLoader) {
+    public List<Capabilities> createAllSystemsBy(@Nullable ClassLoader classLoader) {
         return asImmutableList(load(Capabilities.class, selectClassLoader(classLoader)));
     }
 
     @Nonnull
-    public static List<Capabilities> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<CapabilitiesConfiguration> configurations) {
+    public List<Capabilities> createAllBy(@Nullable ClassLoader classLoader, @Nullable Iterable<CapabilitiesConfiguration> configurations) {
         final List<Capabilities> allCapabilities = new ArrayList<>();
         if (configurations != null) {
             for (CapabilitiesConfiguration configuration : configurations) {
@@ -68,7 +68,5 @@ public class CapabilitiesFactory {
         }
         return asImmutableList(allCapabilities);
     }
-
-    private CapabilitiesFactory() {}
 
 }

@@ -62,5 +62,6 @@ public class DirectProperties {
     }
 
     private DirectProperties() {}
+    protected static final DirectProperties INSTANCE = new DirectProperties();
 
 }

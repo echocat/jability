@@ -20,16 +20,19 @@ import org.echocat.jability.stage.Stage.Impl;
 import javax.annotation.Nonnull;
 import java.util.Comparator;
 
+import static java.lang.Integer.MAX_VALUE;
+import static java.lang.Integer.MIN_VALUE;
+
 public class StageUtils {
 
     private static final Comparator<Stage> COMPARATOR = new Comparator<Stage>() { @Override public int compare(Stage s1, Stage s2) {
         final int result;
         if (s1 == null && s2 == null) {
             result = 0;
-        } else if (s1 != null) {
-            result = 1;
-        } else if (s2 != null) {
-            result = -1;
+        } else if (s1 == null) {
+            result = MAX_VALUE;
+        } else if (s2 == null) {
+            result = MIN_VALUE;
         } else {
             result = Integer.compare(s1.getPriority(), s2.getPriority());
         }
@@ -41,10 +44,12 @@ public class StageUtils {
         return COMPARATOR;
     }
 
-    private StageUtils() {}
-
     @Nonnull
     public static Stage newStage(@Nonnull String id, int priority) {
         return new Impl(id, priority);
     }
+
+    private StageUtils() {}
+    public static final StageUtils INSTANCE = new StageUtils();
+
 }

@@ -96,5 +96,6 @@ public class JabilityFactory {
     }
 
     private JabilityFactory() {}
+    protected static final JabilityFactory INSTANCE = new JabilityFactory();
 
 }

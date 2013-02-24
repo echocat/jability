@@ -183,8 +183,6 @@ public class ConfigurationMarshaller {
         return marshaller;
     }
 
-    private ConfigurationMarshaller() {}
-
     @Nullable
     public static URL findDefaultConfigurationLocation() throws ConfigurationException {
         final String plain = getProperty(CONFIGURATION_PROPERTY_NAME, DEFAULT_CONFIGURATION_LOCATION);
@@ -241,5 +239,8 @@ public class ConfigurationMarshaller {
         }
         return result;
     }
+
+    private ConfigurationMarshaller() {}
+    protected static final ConfigurationMarshaller INSTANCE = new ConfigurationMarshaller();
 
 }

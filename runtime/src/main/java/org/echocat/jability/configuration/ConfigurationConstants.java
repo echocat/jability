@@ -46,4 +46,6 @@ public class ConfigurationConstants {
     }
 
     private ConfigurationConstants() {}
+    protected static final ConfigurationConstants INSTANCE = new ConfigurationConstants();
+
 }

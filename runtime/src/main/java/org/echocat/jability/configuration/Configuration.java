@@ -26,8 +26,6 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
-import static org.apache.commons.lang3.builder.EqualsBuilder.reflectionEquals;
-import static org.apache.commons.lang3.builder.HashCodeBuilder.reflectionHashCode;
 import static org.echocat.jability.configuration.ConfigurationConstants.SCHEMA_NAMESPACE;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
@@ -101,21 +99,4 @@ public class Configuration extends BaseConfiguration {
         return this;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        final boolean result;
-        if (this == o) {
-            result = true;
-        } else if (o == null || getClass() != o.getClass()) {
-            result = false;
-        } else {
-            result = reflectionEquals(this, o);
-        }
-        return result;
-    }
-
-    @Override
-    public int hashCode() {
-        return reflectionHashCode(this);
-    }
 }

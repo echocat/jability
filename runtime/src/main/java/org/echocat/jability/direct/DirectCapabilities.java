@@ -60,5 +60,6 @@ public class DirectCapabilities {
     }
 
     private DirectCapabilities() {}
+    protected static final DirectCapabilities INSTANCE = new DirectCapabilities();
 
 }

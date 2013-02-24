@@ -43,6 +43,6 @@ public class PropertyUtils {
     }
 
     private PropertyUtils() {}
-
+    public static final PropertyUtils INSTANCE = new PropertyUtils();
 
 }

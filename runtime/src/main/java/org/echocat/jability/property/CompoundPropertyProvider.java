@@ -37,4 +37,10 @@ public class CompoundPropertyProvider extends CompoundValueProvider<Property<?>,
         return (Property<V>) super.provideBy(valueType, id);
     }
 
+    @Nonnull
+    @Override
+    protected Iterable<PropertyProvider> getDelegates() {
+        return super.getDelegates();
+    }
+
 }
