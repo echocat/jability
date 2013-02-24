@@ -23,6 +23,7 @@ import java.util.regex.Pattern;
 import static java.lang.reflect.Modifier.isStatic;
 import static java.util.Collections.unmodifiableCollection;
 import static org.echocat.jability.support.AccessType.matches;
+import static org.echocat.jability.support.ClassUtils.selectClassLoader;
 import static org.echocat.jomon.runtime.CollectionUtils.asList;
 
 public class DiscoverUtils {
@@ -68,7 +69,7 @@ public class DiscoverUtils {
     @Nonnull
     public static <T> Iterable<Class<? extends T>> discoverTypesOf(@Nonnull final Class<?> baseType, @Nullable final Class<T> expectedType, @Nullable final ClassLoader classLoader) {
         return new Iterable<Class<? extends T>>() { @Override public Iterator<Class<? extends T>> iterator() {
-            return new TypeIterator<>(baseType, expectedType, ClassUtils.selectClassLoader(classLoader));
+            return new TypeIterator<>(baseType, expectedType, selectClassLoader(classLoader));
         }};
     }
 

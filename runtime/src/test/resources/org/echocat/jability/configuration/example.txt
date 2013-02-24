@@ -9,13 +9,14 @@
         <provider type="org.echocat.jability.impl.TestCapabilityProviderB"/>
     </capabilities>
     <stages current="testCurrent" respectSystemProviders="true">
+        <available id="testCurrent"/>
         <available id="a"/>
         <available id="b"/>
         <available id="c"/>
         <stage priority="1" id="a"/>
         <stage priority="2" id="b"/>
         <stage priority="3" id="c"/>
-        <stage priority="4" id="d"/>
+        <stage priority="4" id="testCurrent"/>
         <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestStageReferenceA"/>
         <reference fromField="/test.*/" fromType="org.echocat.jability.impl.TestStageReferenceB"/>
         <provider type="org.echocat.jability.impl.TestStageProviderA"/>

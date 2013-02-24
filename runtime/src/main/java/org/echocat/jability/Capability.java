@@ -36,20 +36,6 @@ public interface Capability<V> extends Value<V> {
             this(valueType, IdUtils.buildIdFrom(basedOn, subId), defaultValue);
         }
 
-        @Override
-        public boolean equals(Object o) {
-            final boolean result;
-            if (this == o) {
-                result = true;
-            } else if (!(o instanceof Capability)) {
-                result = false;
-            } else {
-                final Capability<?> that = (Capability) o;
-                result = getId().equals(that.getId());
-            }
-            return result;
-        }
-
     }
 
 }

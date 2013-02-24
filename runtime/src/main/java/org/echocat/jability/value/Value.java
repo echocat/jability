@@ -67,7 +67,7 @@ public interface Value<V> {
             final boolean result;
             if (this == o) {
                 result = true;
-            } else if (!(o instanceof Value)) {
+            } else if (!getClass().isInstance(o)) {
                 result = false;
             } else {
                 final Value<?> that = (Value) o;

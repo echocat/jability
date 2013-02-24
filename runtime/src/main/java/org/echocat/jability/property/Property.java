@@ -49,20 +49,6 @@ public interface Property<V> extends Value<V> {
             this(valueType, IdUtils.buildIdFrom(basedOn, subId), defaultValue);
         }
 
-        @Override
-        public boolean equals(Object o) {
-            final boolean result;
-            if (this == o) {
-                result = true;
-            } else if (!(o instanceof Property)) {
-                result = false;
-            } else {
-                final Property<?> that = (Property) o;
-                result = getId().equals(that.getId());
-            }
-            return result;
-        }
-
     }
 
 }
